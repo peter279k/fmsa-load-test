@@ -8,7 +8,7 @@ class FHIRConverterConvertUser(HttpUser):
 
     @task()
     def convert_data(self):
-        json_file = 'expected_sport.raw_data_goldensmarthome_20241212.json'
+        json_file = '/opt/data/sport.raw_data_goldensmarthome_20241212.json'
         if os.path.isfile(json_file) is False:
             raise Exception(f'The {json_file} file is missed.')
 
