@@ -1,0 +1,6 @@
+services:
+  locust:
+    build: ./
+    command: bash
+    volumes:
+      - ./data/:/opt/data
