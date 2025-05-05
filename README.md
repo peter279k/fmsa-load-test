@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Using the Locust do the load testing for FMSA.
+Using the Locust to do the load testing for FMSA.
 
 ## Usage
 
