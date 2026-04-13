@@ -18,7 +18,7 @@ class LtcTWSC2(HttpUser):
     wait_time = constant(0)
 
     def on_start(self):
-        with open('/app/app/tests/scenarios/procedure.json') as f:
+        with open('./data/procedure.json') as f:
             self.procedure_data = f.read()
 
         self.module_name = 'ProcedureLtcConverter'

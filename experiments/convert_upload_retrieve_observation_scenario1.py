@@ -93,6 +93,7 @@ class LtcTWSC1(HttpUser):
             '/api/v1/ltc_tw_2025_observation_blood_pressure',
             headers=self.headers,
             json=json_dict,
+            name='POST /api/v1/ltc_tw_2025_observation_blood_pressure',
             catch_response=True
         ) as response:
             if response.status_code == 200:
@@ -105,6 +106,7 @@ class LtcTWSC1(HttpUser):
         with self.client.get(
             f'/api/v1/retrieve/Observation?_id={observation_id}',
             headers=self.headers,
+            name=f'GET /api/v1/retrieve/Observation?_id={observation_id}',
             catch_response=True
         ) as response:
             if response.status_code in (200, 404):
