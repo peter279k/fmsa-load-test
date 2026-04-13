@@ -1,22 +1,29 @@
-import os
 import json
-import time
-from locust import HttpUser, task, between
+from locust import HttpUser, constant, events
+
+
+@events.test_start.add_listener
+def on_test_start(environment):
+    parsed = environment.parsed_options
+    print(
+        f'\n[Config] Target Concurrent users：{parsed.num_users} │ '
+        f'Spawn Rate：{parsed.spawn_rate}/s │ '
+        f'Executed Time：{parsed.run_time}s\n'
+    )
 
 
 class LtcTWSC1(HttpUser):
-    wait_time = between(1, 5)
+    wait_time = constant(0)
 
-    @task()
-    def convert_data(self):
-        host = 'http://localhost:8081'
-        headers = {
+    def on_start(self):
+        self.headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'x-api-key': 'API Key',
             'x-user': 'User',
         }
-        payload = {
+
+        self.payload = {
             'resourceType': 'Observation',
             'profile_urls': ['http://ltc-ig.fhir.tw/StructureDefinition/LTCObservationVitalSigns'],
             'status': 'final',
@@ -70,19 +77,37 @@ class LtcTWSC1(HttpUser):
             }]
         }
 
-        with open('/app/app/tests/scenarios/Observation-ltc-observation-blood-pressure-example.json', 'r', encoding='utf-8') as f:
+    @task
+    def ltc_tw_sc1(self):
+        with open('./data/Observation-ltc-observation-blood-pressure-example.json', 'r', encoding='utf-8') as f:
             expected_json_str = f.read()
 
-            expected_json = json.loads(expected_json_str)
-            del expected_json['text']
-            del expected_json['id']
+        expected_json = json.loads(expected_json_str)
+        del expected_json['text']
+        del expected_json['id']
 
-            json_dict = {}
-            json_dict['payload'] = payload
-            httpx.post(f'{host}/api/v1/ltc_tw_2025_observation_blood_pressure', headers=headers, json=json_dict)
+        json_dict = {}
+        json_dict['payload'] = self.payload
 
-            response_json = response.json()
-            observation_id = response_json['data'][0]['id']
-            del response_json['data'][0]['id']
+        with self.client.post(
+            '/api/v1/ltc_tw_2025_observation_blood_pressure',
+            headers=self.headers,
+            json=json_dict,
+            catch_response=True
+        ) as response:
+            if response.status_code == 200:
+                response_json = response.json()
+                observation_id = response_json['data'][0]['id']
+                response.success()
+            else:
+                response.failure(f'Unexpected status code: {response.status_code}')
 
-            httpx.get(f'{host}/api/v1/retrieve/Observation?_id={observation_id}', headers=headers)
+        with self.client.get(
+            f'/api/v1/retrieve/Observation?_id={observation_id}',
+            headers=self.headers,
+            catch_response=True
+        ) as response:
+            if response.status_code in (200, 404):
+                response.success()
+            else:
+                response.failure(f'Unexpected status code: {response.status_code}')
