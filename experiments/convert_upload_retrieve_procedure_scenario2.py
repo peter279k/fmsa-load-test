@@ -1,27 +1,79 @@
-import os
 import json
-import time
-from locust import HttpUser, task, between
+import hashlib
+import secrets
+from locust import HttpUser, constant, events
 
 
-class LtcTWSC1(HttpUser):
-    wait_time = between(1, 5)
+@events.test_start.add_listener
+def on_test_start(environment):
+    parsed = environment.parsed_options
+    print(
+        f'\n[Config] Target Concurrent users：{parsed.num_users} │ '
+        f'Spawn Rate：{parsed.spawn_rate}/s │ '
+        f'Executed Time：{parsed.run_time}s\n'
+    )
 
-    @task()
-    def convert_data(self):
-        json_file = '/opt/data/sport.raw_data_goldensmarthome_20241212.json'
-        if os.path.isfile(json_file) is False:
-            raise Exception(f'The {json_file} file is missed.')
 
-        with open(json_file, 'r') as f:
-            golden_smart_home_data = f.read()
+class LtcTWSC2(HttpUser):
+    wait_time = constant(0)
 
-        module_name = 'GoldenSmartHomeConverter'
-        headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
-        payload = {
-            'module_name': module_name,
-            'original_data': json.loads(golden_smart_home_data),
+    def on_start(self):
+        with open('/app/app/tests/scenarios/procedure.json') as f:
+            self.procedure_data = f.read()
+
+        self.module_name = 'ProcedureLtcConverter'
+        self.payload = {
+            'module_name': self.module_name,
+            'original_data': json.loads(self.procedure_data),
+        }
+        self.headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'x-api-key': 'API Key',
+            'x-user': 'User',
         }
 
-        self.client.post('/api/v1/convert', json=payload, headers=headers)
-        time.sleep(1)
+    @task
+    def ltc_tw_sc2(self):
+        with self.client.post(
+            f'/api/v1/convert',
+            headers=self.headers,
+            json=self.payload,
+            name='POST /api/v1/convert',
+            catch_response=True
+        ) as response:
+            response_json = response.json()
+            response_json_data = response_json['data'][0]
+
+            if response.status_code == 200:
+                response.success()
+            else:
+                response.failure(f'Unexpected status code: {response.status_code}')
+
+        payload = {
+            'resource': response_json_data[0],
+        }
+        procedure_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
+        response_json_data[0]['id'] = procedure_id
+
+        with self.client.put(
+            f'/api/v1/update/Procedure',
+            headers=self.headers, json=payload,
+            name='PUT /api/v1/update/Procedure',
+            catch_response=True,
+        ) as response:
+            if response.status_code == 201:
+                response.success()
+            else:
+                response.failure(f'Unexpected status code: {response.status_code}')
+
+        with self.client.get(
+            f'/api/v1/retrieve/Procedure?_id={procedure_id}',
+            headers=self.headers,
+            name=f'GET /api/v1/retrieve/Procedure?_id={procedure_id}',
+            catch_response=True,
+        ) as response:
+            if response.status_code == 200:
+                response.success()
+            else:
+                response.failure(f'Unexpected status code: {response.status_code}')
