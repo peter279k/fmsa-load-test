@@ -34,20 +34,6 @@ def upload_required_references():
 
     assert response.status_code == 201 or response.status_code == 200
 
-    with open('./data/PractitionerRole-ltc-practitioner-role-nurse-example.json') as f:
-        json_str = f.read()
-
-    json_dict = json.loads(json_str)
-    del json_dict['meta']
-    del json_dict['text']
-
-    payload = {
-        'resource': json_dict,
-    }
-    response = httpx.put('http://localhost:8081/api/v1/update/PractitionerRole', headers=headers, json=payload)
-
-    assert response.status_code == 201 or response.status_code == 200
-
     with open('./data/Organization-ltc-organization-example.json') as f:
         json_str = f.read()
 
@@ -59,6 +45,20 @@ def upload_required_references():
         'resource': json_dict,
     }
     response = httpx.put('http://localhost:8081/api/v1/update/Organization', headers=headers, json=payload)
+
+    assert response.status_code == 201 or response.status_code == 200
+
+    with open('./data/PractitionerRole-ltc-practitioner-role-nurse-example.json') as f:
+        json_str = f.read()
+
+    json_dict = json.loads(json_str)
+    del json_dict['meta']
+    del json_dict['text']
+
+    payload = {
+        'resource': json_dict,
+    }
+    response = httpx.put('http://localhost:8081/api/v1/update/PractitionerRole', headers=headers, json=payload)
 
     assert response.status_code == 201 or response.status_code == 200
 
