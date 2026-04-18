@@ -1,6 +1,7 @@
 # Introduction
 
-This is the utility for executing the FMSA load tests.
+- This is the utility for executing the FMSA load tests.
+- It's for RQ3 about scaling up/down for the FMSA.
 
 ## Prerequisites
 

@@ -4,7 +4,19 @@
 
 Using the Locust to do the load testing for FMSA.
 
-## Usage
+## Prerequisite
+
+- Ensuring the Docker Swarm Cluster has been deployed.
+- Ensuring the FMSA has been deployed with the Docker Stack mode in the Swarm Cluster.
+- Ensuring the Swarm Automatic Scaler has been deployed in the Swarm CLuster.
+  - It can run these following commands to complete this step:
+
+```bash
+$ wget https://github.com/AMEST/swarm-autoscaler/raw/refs/heads/master/swarm-deploy.yml
+$ docker stack deploy -c swarm-deploy.yml ascaler
+```
+
+## Usage (for Single Cluster)
 
 - Cloning the repository with the `git clone` command.
 - Using the `docker build -t fmsa-load-test . --no-cache` command to build the Docker image.
@@ -19,3 +31,7 @@ docker run -it -p 8089:8089 \
 ```
 
 - In the interactive Docker container, running the `locust -f ./data/` command to start the web interface.
+
+## Usage (for Docker Swarm Clusters)
+
+- Please refer this [README](experiments/README.md).
