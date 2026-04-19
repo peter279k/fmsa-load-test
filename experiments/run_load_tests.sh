@@ -20,7 +20,7 @@ do
         --run-time 20m \
         --csv="$csv_result"
 
-    sleep(300)
+    sleep 300
 done;
 
 echo "Executing Load Test is done!"
