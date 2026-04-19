@@ -88,7 +88,6 @@ class LtcTWSC1(HttpUser):
 
         json_dict = {}
         json_dict['payload'] = self.payload
-        observation_id = ''
 
         with self.client.post(
             '/api/v1/ltc_tw_2025_observation_blood_pressure',
@@ -97,13 +96,14 @@ class LtcTWSC1(HttpUser):
             name='POST /api/v1/ltc_tw_2025_observation_blood_pressure',
             catch_response=True
         ) as response:
-            print(response.text)
             if response.status_code == 200:
                 response_json = response.json()
                 observation_id = response_json['data'][0]['id']
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
+                print(response.text)
+                exit(1)
 
         with self.client.get(
             f'/api/v1/retrieve/Observation?_id={observation_id}',
