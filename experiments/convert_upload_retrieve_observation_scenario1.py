@@ -88,6 +88,7 @@ class LtcTWSC1(HttpUser):
 
         json_dict = {}
         json_dict['payload'] = self.payload
+        observation_id = ''
 
         with self.client.post(
             '/api/v1/ltc_tw_2025_observation_blood_pressure',
