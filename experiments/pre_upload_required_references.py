@@ -3,7 +3,12 @@ import httpx
 
 
 def upload_required_references():
-    headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'x-api-key': 'API Key',
+        'x-user': 'User',
+    }
 
     with open('./data/Practitioner-ltc-practitioner-physician-aa12-example.json')as f:
         json_str = f.read()
