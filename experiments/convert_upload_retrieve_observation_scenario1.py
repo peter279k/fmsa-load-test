@@ -102,8 +102,8 @@ class LtcTWSC1(HttpUser):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
-                print(response.text)
-                exit(1)
+                with open('response.txt', 'w') as f:
+                    f.write(response.text)
 
         with self.client.get(
             f'/api/v1/retrieve/Observation?_id={observation_id}',
