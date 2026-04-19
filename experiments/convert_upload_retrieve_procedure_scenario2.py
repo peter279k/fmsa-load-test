@@ -1,7 +1,7 @@
 import json
 import hashlib
 import secrets
-from locust import HttpUser, constant, events
+from locust import HttpUser, constant, events, task
 
 
 @events.test_start.add_listener

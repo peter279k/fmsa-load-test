@@ -1,5 +1,5 @@
 import json
-from locust import HttpUser, constant, events
+from locust import HttpUser, constant, events, task
 
 
 @events.test_start.add_listener
