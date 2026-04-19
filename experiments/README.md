@@ -32,4 +32,5 @@ locust -f {load_test_file.py} --headless \
     --users 1000 \
     --spawn-rate 1.11 \
     --run-time 20m
+    --csv={your-result-name}
 ```
