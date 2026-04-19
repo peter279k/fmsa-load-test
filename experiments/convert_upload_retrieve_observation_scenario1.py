@@ -97,6 +97,7 @@ class LtcTWSC1(HttpUser):
             name='POST /api/v1/ltc_tw_2025_observation_blood_pressure',
             catch_response=True
         ) as response:
+            print(response.text)
             if response.status_code == 200:
                 response_json = response.json()
                 observation_id = response_json['data'][0]['id']
