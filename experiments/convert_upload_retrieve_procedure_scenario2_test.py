@@ -44,6 +44,7 @@ class LtcTWSC2:
             headers=self.headers,
             json=payload,
         )
+        print(response.text)
         assert response.status_code == 201
 
         response = httpx.get(
