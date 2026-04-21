@@ -42,8 +42,6 @@ do
     cd ~/swarm-auto-scaler/scaler
     ./deploy.sh
 
-    ~/fmsa/fmsa-env/bin/python -m pytest -s api_gateway/app/tests/scenarios/test_cluster_ltc_tw_scenarios.py
-
     cd ~/fmsa-load-test/experiments
     ./fmsa-load-test-experiments/bin/python pre_upload_required_references.py
 
