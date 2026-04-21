@@ -30,17 +30,17 @@ fi;
 for file_name in $(cat $path)
 do
     docker stack rm fmsa
-    sleep 60
+    sleep 300
     docker volume rm $(docker volume ls | grep fmsa | awk '{print $2}')
 
     cd ~/fmsa
 
     set -a && source .env && set +a && docker stack deploy --compose-file docker-compose.yml fmsa
 
-    sleep 300
-
     cd ~/swarm-auto-scaler/scaler
     ./deploy.sh
+
+    sleep 300
 
     cd ~/fmsa-load-test/experiments
     ./fmsa-load-test-experiments/bin/python pre_upload_required_references.py
