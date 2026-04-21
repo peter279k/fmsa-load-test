@@ -21,10 +21,11 @@ class LtcTWSC3:
             'x-api-key': 'API Key',
             'x-user': 'User',
         }
+        self.host = 'http://127.0.0.1:8081'
 
     def ltc_tw_sc3(self):
         response = httpx.post(
-            f'/api/v1/convert',
+            f'{self.host}/api/v1/convert',
             headers=self.headers,
             json=self.payload
         )
@@ -39,7 +40,7 @@ class LtcTWSC3:
             'resource': response_json_data[0],
         }
         response = httpx.put(
-            f'/api/v1/update/MedicationAdministration',
+            f'{self.host}/api/v1/update/MedicationAdministration',
             headers=self.headers,
             json=payload
         )
@@ -47,7 +48,7 @@ class LtcTWSC3:
         assert response.status_code == 201
 
         response = httpx.get(
-            f'/api/v1/retrieve/MedicationAdministration?_id={medication_admin_id}',
+            f'{self.host}/api/v1/retrieve/MedicationAdministration?_id={medication_admin_id}',
             headers=self.headers
         )
         assert response.status_code == 200
