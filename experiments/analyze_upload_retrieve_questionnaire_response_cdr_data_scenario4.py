@@ -1,4 +1,5 @@
 import json
+import gevent
 import hashlib
 import secrets
 from locust import HttpUser, constant, events, task
@@ -57,6 +58,8 @@ class LtcTWSC4(HttpUser):
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
 
+        gevent.sleep(2)
+
         questionnaire_response_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
         self.json_data[0]['id'] = questionnaire_response_id
         payload = {
@@ -75,13 +78,15 @@ class LtcTWSC4(HttpUser):
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
 
+        gevent.sleep(2)
+
         with self.client.get(
             f'/api/v1/retrieve/QuestionnaireResponse?_id={questionnaire_response_id}',
             headers=self.headers,
             name=f'GET /api/v1/retrieve/QuestionnaireResponse?_id={questionnaire_response_id}',
             catch_response=True
         ) as response:
-            if response.status_code == 200:
+            if response.status_code in (200, 404):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')

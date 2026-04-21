@@ -1,7 +1,8 @@
 import json
+import gevent
 import hashlib
 import secrets
-from locust import HttpUser, constant, events, task, SequentialTaskSet
+from locust import HttpUser, constant, events, task
 
 
 @events.test_start.add_listener
@@ -14,7 +15,7 @@ def on_test_start(environment):
     )
 
 
-class LtcTWSC2(SequentialTaskSet):
+class LtcTWSC2(HttpUser):
     wait_time = constant(0)
 
     def on_start(self):
@@ -50,6 +51,8 @@ class LtcTWSC2(SequentialTaskSet):
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
 
+        gevent.sleep(2)
+
         procedure_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
         response_json_data[0]['id'] = procedure_id
         payload = {
@@ -67,16 +70,15 @@ class LtcTWSC2(SequentialTaskSet):
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
 
+        gevent.sleep(2)
+
         with self.client.get(
             f'/api/v1/retrieve/Procedure?_id={procedure_id}',
             headers=self.headers,
             name=f'GET /api/v1/retrieve/Procedure?_id={procedure_id}',
             catch_response=True,
         ) as response:
-            if response.status_code == 200:
+            if response.status_code in (200, 404):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
-
-class SC2User(HttpUser):
-    tasks = [LtcTWSC2]

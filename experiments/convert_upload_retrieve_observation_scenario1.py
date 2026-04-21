@@ -1,4 +1,5 @@
 import json
+import gevent
 from locust import HttpUser, constant, events, task
 
 
@@ -104,6 +105,8 @@ class LtcTWSC1(HttpUser):
                 response.failure(f'Unexpected status code: {response.status_code}')
                 with open('response.txt', 'w') as f:
                     f.write(response.text)
+
+        gevent.sleep(2)
 
         with self.client.get(
             f'/api/v1/retrieve/Observation?_id={observation_id}',
