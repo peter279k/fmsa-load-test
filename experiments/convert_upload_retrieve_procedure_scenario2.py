@@ -1,7 +1,7 @@
 import json
 import hashlib
 import secrets
-from locust import HttpUser, constant, events, task
+from locust import HttpUser, constant, events, task, SequentialTaskSet
 
 
 @events.test_start.add_listener
@@ -14,7 +14,7 @@ def on_test_start(environment):
     )
 
 
-class LtcTWSC2(HttpUser):
+class LtcTWSC2(SequentialTaskSet):
     wait_time = constant(0)
 
     def on_start(self):
@@ -77,3 +77,6 @@ class LtcTWSC2(HttpUser):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
+
+class SC2User(HttpUser):
+    tasks = [LtcTWSC2]
