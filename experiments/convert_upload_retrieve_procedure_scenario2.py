@@ -69,16 +69,3 @@ class LtcTWSC2(HttpUser):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
-
-        gevent.sleep(2)
-
-        with self.client.get(
-            f'/api/v1/retrieve/Procedure?_id={procedure_id}',
-            headers=self.headers,
-            name=f'GET /api/v1/retrieve/Procedure?_id={procedure_id}',
-            catch_response=True,
-        ) as response:
-            if response.status_code in (200, 404):
-                response.success()
-            else:
-                response.failure(f'Unexpected status code: {response.status_code}')
