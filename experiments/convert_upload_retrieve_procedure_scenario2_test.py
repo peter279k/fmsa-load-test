@@ -51,3 +51,9 @@ class LtcTWSC2():
             headers=self.headers
         )
         assert response.status_code == 200
+
+
+if __name__ == '__main__':
+    sc2 = LtcTWSC2
+    sc2.on_start()
+    sc2.ltc_tw_sc2()
