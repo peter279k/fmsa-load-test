@@ -4,7 +4,7 @@ import hashlib
 import secrets
 
 
-class LtcTWSC2():
+class LtcTWSC2:
     def on_start(self):
         with open('./data/procedure.json') as f:
             self.procedure_data = f.read()
@@ -54,6 +54,6 @@ class LtcTWSC2():
 
 
 if __name__ == '__main__':
-    sc2 = LtcTWSC2
+    sc2 = LtcTWSC2()
     sc2.on_start()
     sc2.ltc_tw_sc2()
