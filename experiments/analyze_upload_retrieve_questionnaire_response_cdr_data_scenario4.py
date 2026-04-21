@@ -58,8 +58,6 @@ class LtcTWSC4(HttpUser):
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
 
-        gevent.sleep(2)
-
         questionnaire_response_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
         self.json_data[0]['id'] = questionnaire_response_id
         payload = {

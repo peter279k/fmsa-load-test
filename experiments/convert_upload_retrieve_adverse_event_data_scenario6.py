@@ -51,8 +51,6 @@ class LtcTWSC6(HttpUser):
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
 
-        gevent.sleep(2)
-
         adverse_event_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
         response_json_data[0]['id'] = adverse_event_id
         payload = {

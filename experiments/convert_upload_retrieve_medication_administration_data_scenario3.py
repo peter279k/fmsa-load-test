@@ -51,8 +51,6 @@ class LtcTWSC3(HttpUser):
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
 
-        gevent.sleep(2)
-
         medication_admin_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
         response_json_data[0]['id'] = medication_admin_id
         payload = {
