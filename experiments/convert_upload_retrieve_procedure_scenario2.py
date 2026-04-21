@@ -50,11 +50,11 @@ class LtcTWSC2(HttpUser):
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
 
+        procedure_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
+        response_json_data[0]['id'] = procedure_id
         payload = {
             'resource': response_json_data[0],
         }
-        procedure_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
-        response_json_data[0]['id'] = procedure_id
 
         with self.client.put(
             f'/api/v1/update/Procedure',
