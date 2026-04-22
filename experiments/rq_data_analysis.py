@@ -27,21 +27,18 @@ micro_csv_files = []
 for csv_file in mono_csv_files:
     micro_csv_files += csv_file[5:],
 
+xlabel = 'Timeline (s)'
+ylabel = 'Total Average Response Time'
+
 for index,csv_file in enumerate(mono_csv_files):
     mono_csv_file = csv_file
     micro_csv_file = micro_csv_files[index]
 
     mono_history = pd.read_csv(mono_csv_file)
     mono_history['Timestamp'] = pd.to_datetime(mono_history['Timestamp'], unit='s')
-    start_time = mono_history['Timestamp'].min()
-    mono_history['Minutes'] = (mono_history['Timestamp'] - start_time) / 60
-    mono_agg_df = mono_history[mono_history['Name'] == 'Aggregated']
 
     micro_history = pd.read_csv(micro_csv_file)
     micro_history['Timestamp'] = pd.to_datetime(micro_history['Timestamp'], unit='s')
-    start_time = micro_history['Timestamp'].min()
-    micro_history['Minutes'] = (micro_history['Timestamp'] - start_time) / 60
-    micro_agg_df = micro_history[mircro_history['Name'] == 'Aggregated']
 
     print(f'Processing and Drawing the RQ3 {csv_file} data.')
 
@@ -50,17 +47,19 @@ for index,csv_file in enumerate(mono_csv_files):
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
+        length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
+
         ax.plot(
-            mono_agg_df['Minutes'],
-            mono_agg_df['Total Average Response Time'],
+            range(0, length),
+            mono_history['Total Average Response Time'][0:length],
             label='monolith', color='blue', ls='-', marker=''
         )
         ax.plot(
-            mono_agg_df['Minutes'],
-            micro_agg_df['Total Average Response Time'],
+            range(0, length),
+            micro_history['Total Average Response Time'][0:length],
             label='microservice', color='orange', ls='-', marker='')
 
-        ax.legend(title='Average Response Time')
+        ax.legend()
 
         ax.set_xlabel(xlabel, fontdict=fontdict)
         ax.set_ylabel(ylabel, fontdict=fontdict)
