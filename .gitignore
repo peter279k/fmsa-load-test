@@ -1,3 +1,4 @@
 data/*
 scenarios.txt
+experiments/*.csv
 experiments/fmsa-load-test-experiments/*

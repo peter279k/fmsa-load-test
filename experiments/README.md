@@ -34,3 +34,7 @@ locust -f {load_test_file.py} --headless \
     --run-time 20m
     --csv={your-result-name}
 ```
+
+# References
+
+- https://oneuptime.com/blog/post/2026-01-28-analyze-locust-test-results/view
