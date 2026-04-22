@@ -1,3 +1,5 @@
 data/*
+exp_plot/
 scenarios.txt
-./experiments/fmsa-load-test-experiments/*
+experiments/*.csv
+experiments/fmsa-load-test-experiments/*
