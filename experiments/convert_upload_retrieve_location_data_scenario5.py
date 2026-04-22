@@ -49,21 +49,3 @@ class LtcTWSC5(HttpUser):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
-
-        location_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
-        response_json_data[0]['id'] = location_id
-        payload = {
-            'resource': response_json_data[0],
-        }
-
-        with self.client.put(
-            '/api/v1/update/Location',
-            headers=self.headers,
-            json=payload,
-            name='PUT /api/v1/update/Location',
-            catch_response=True
-        ) as response:
-            if response.status_code == 201:
-                response.success()
-            else:
-                response.failure(f'Unexpected status code: {response.status_code}')

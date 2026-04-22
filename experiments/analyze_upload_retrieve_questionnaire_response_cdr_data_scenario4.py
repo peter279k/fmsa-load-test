@@ -57,21 +57,3 @@ class LtcTWSC4(HttpUser):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
-
-        questionnaire_response_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
-        self.json_data[0]['id'] = questionnaire_response_id
-        payload = {
-            'resource': self.json_data[0],
-        }
-
-        with self.client.put(
-            '/api/v1/update/QuestionnaireResponse',
-            headers=self.headers,
-            json=payload,
-            name='PUT /api/v1/update/QuestionnaireResponse',
-            catch_response=True
-        ) as response:
-            if response.status_code == 201:
-                response.success()
-            else:
-                response.failure(f'Unexpected status code: {response.status_code}')

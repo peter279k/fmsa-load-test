@@ -50,20 +50,3 @@ class LtcTWSC3(HttpUser):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')
-
-        medication_admin_id = hashlib.sha3_224(secrets.token_urlsafe(5).encode('utf-8')).hexdigest()
-        response_json_data[0]['id'] = medication_admin_id
-        payload = {
-            'resource': response_json_data[0],
-        }
-        with self.client.put(
-            f'/api/v1/update/MedicationAdministration',
-            headers=self.headers,
-            json=payload,
-            name='PUT /api/v1/update/MedicationAdministration',
-            catch_response=True
-        ) as response:
-            if response.status_code == 201:
-                response.success()
-            else:
-                response.failure(f'Unexpected status code: {response.status_code}')
