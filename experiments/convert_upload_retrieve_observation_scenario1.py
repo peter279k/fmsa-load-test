@@ -1,4 +1,3 @@
-import json
 from locust import HttpUser, constant, events, task
 
 

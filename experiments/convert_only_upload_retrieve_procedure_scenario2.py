@@ -1,7 +1,4 @@
 import json
-import gevent
-import hashlib
-import secrets
 from locust import HttpUser, constant, events, task
 
 
