@@ -15,7 +15,7 @@ def on_test_start(environment):
 
 
 class LtcTWSC2(HttpUser):
-    wait_time = constant(0)
+    wait_time = constant(3)
 
     def on_start(self):
         with open('./data/procedure.json') as f:
