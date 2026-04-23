@@ -98,8 +98,6 @@ class LtcTWSC1(HttpUser):
             catch_response=True
         ) as response:
             if response.status_code == 200:
-                response_json = response.json()
-                observation_id = response_json['data'][0]['id']
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')

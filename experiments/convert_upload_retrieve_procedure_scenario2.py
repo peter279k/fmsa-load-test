@@ -43,9 +43,6 @@ class LtcTWSC2(HttpUser):
             name='POST /api/v1/convert',
             catch_response=True
         ) as response:
-            response_json = response.json()
-            response_json_data = response_json['data'][0]
-
             if response.status_code == 200:
                 response.success()
             else:
