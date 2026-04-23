@@ -1,3 +1,4 @@
+import json
 from locust import HttpUser, constant, events, task
 
 
@@ -89,6 +90,17 @@ class LtcTWSC1(HttpUser):
             catch_response=True
         ) as response:
             if response.status_code == 200:
-                response.success()
+                response_json = response.json()
+                observation_id = response_json['data'][0]['id']
+                with self.client.get(
+                    f'/api/v1/retrieve/Observation?_id={observation_id}',
+                    headers=self.headers,
+                    name=f'GET /api/v1/retrieve/Observation?_id={observation_id}',
+                    catch_response=True
+                ) as response:
+                    if response.status_code in (200, 404):
+                        response.success()
+                    else:
+                        response.failure(f'Unexpected status code: {response.status_code}')
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')

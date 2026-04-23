@@ -78,17 +78,14 @@ class LtcTWSC1(HttpUser):
 
     @task
     def ltc_tw_sc1(self):
-        json_dict = {}
-        json_dict['payload'] = self.payload
-
-        with self.client.post(
-            '/api/v1/ltc_tw_2025_observation_blood_pressure',
+        observation_id = 'ltc-observation-blood-pressure-example'
+        with self.client.get(
+            f'/api/v1/retrieve/Observation?_id={observation_id}',
             headers=self.headers,
-            json=json_dict,
-            name='POST /api/v1/ltc_tw_2025_observation_blood_pressure',
+            name=f'GET /api/v1/retrieve/Observation?_id={observation_id}',
             catch_response=True
         ) as response:
-            if response.status_code == 200:
+            if response.status_code in (200, 404):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')

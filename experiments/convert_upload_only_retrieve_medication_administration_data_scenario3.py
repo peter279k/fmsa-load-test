@@ -1,0 +1,51 @@
+import json
+from locust import HttpUser, constant, events, task
+
+
+@events.test_start.add_listener
+def on_test_start(environment):
+    parsed = environment.parsed_options
+    print(
+        f'\n[Config] Target Concurrent users：{parsed.num_users} │ '
+        f'Spawn Rate：{parsed.spawn_rate}/s │ '
+        f'Executed Time：{parsed.run_time}s\n'
+    )
+
+
+class LtcTWSC3(HttpUser):
+    wait_time = constant(0)
+
+    def on_start(self):
+        with open('./data/medication_administration.json') as f:
+            medication_admin_data = f.read()
+
+        self.medication_lists = json.loads(medication_admin_data)['用藥紀錄']
+        self.module_name = 'MedicationAdministrationLtcConverter'
+        self.payload = {
+            'module_name': self.module_name,
+            'original_data': self.medication_lists,
+        }
+        self.headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'x-api-key': 'API Key',
+            'x-user': 'User',
+        }
+
+    @task
+    def ltc_tw_sc3(self):
+        response_json_data = [{'resourceType': 'MedicationAdministration', 'id': 'c1197e0416f63bca3afb893216e139f4859c03dca03581ed5f76478e', 'status': 'completed', 'medicationCodeableConcept': {'coding': [{'system': 'http://snomed.info/sct', 'code': '323567000', 'display': 'Amoxicillin (as amoxicillin sodium) 500 mg and clavulanic acid (as clavulanate potassium) 100 mg powder for solution for injection vial'}], 'text': 'Amoxicillin (as amoxicillin sodium) 500 mg and clavulanic acid (as clavulanate potassium) 100 mg powder for solution for injection vial'}, 'subject': {'reference': 'Patient/ltc-patient-chen-ming-hui'}, 'effectiveDateTime': '2025-03-01T00:00+08:00', 'performer': [{'actor': {'reference': 'PractitionerRole/ltc-practitioner-role-nurse-example'}}], 'note': [{'time': '2025-03-01T00:00+08:00', 'text': '飯後服用，治療呼吸道感染'}], 'dosage': {'route': {'coding': [{'system': 'http://snomed.info/sct', 'code': '26643006', 'display': 'Oral route'}], 'text': '口服'}, 'dose': {'value': 500.0, 'unit': 'mg', 'system': 'http://unitsofmeasure.org', 'code': 'mg'}}}, {'resourceType': 'MedicationAdministration', 'id': '9c15842302b737245b316c23946938a427ae3d6f30736506cfcf7425', 'status': 'completed', 'medicationCodeableConcept': {'coding': [{'system': 'http://snomed.info/sct', 'code': '395483007', 'display': 'Metoprolol-containing product in oral dose form'}], 'text': 'Metoprolol-containing product in oral dose form'}, 'subject': {'reference': 'Patient/ltc-patient-chen-ming-hui'}, 'effectiveDateTime': '2024-11-15T00:00+08:00', 'performer': [{'actor': {'reference': 'PractitionerRole/ltc-practitioner-role-nurse-example'}}], 'note': [{'time': '2024-11-15T00:00+08:00', 'text': '控制高血壓，勿自行停藥'}], 'dosage': {'route': {'coding': [{'system': 'http://snomed.info/sct', 'code': '26643006', 'display': 'Oral route'}], 'text': '口服'}, 'dose': {'value': 50.0, 'unit': 'mg', 'system': 'http://unitsofmeasure.org', 'code': 'mg'}}}, {'resourceType': 'MedicationAdministration', 'id': 'c52b4d3095153432dd9d6b57e2708d56899bb0c88a837e3bea6c42b4', 'status': 'completed', 'medicationCodeableConcept': {'coding': [{'system': 'http://snomed.info/sct', 'code': '778558005', 'display': 'Budesonide only product in nasal dose form'}], 'text': 'Budesonide only product in nasal dose form'}, 'subject': {'reference': 'Patient/ltc-patient-chen-ming-hui'}, 'effectiveDateTime': '2025-01-20T00:00+08:00', 'performer': [{'actor': {'reference': 'PractitionerRole/ltc-practitioner-role-nurse-example'}}], 'note': [{'time': '2025-01-20T00:00+08:00', 'text': '氣喘控制用，使用後漱口'}], 'dosage': {'route': {'coding': [{'system': 'http://snomed.info/sct', 'code': '46713006', 'display': 'Nasal use'}], 'text': '吸入'}, 'dose': {'value': 200.0, 'unit': 'μg', 'system': 'http://unitsofmeasure.org', 'code': 'μg'}}}, {'resourceType': 'MedicationAdministration', 'id': '70999383235ce6a676bad6b9aabd59df7911ef4746f5b31e48b28ea0', 'status': 'completed', 'medicationCodeableConcept': {'coding': [{'system': 'http://snomed.info/sct', 'code': '1304278000', 'display': 'Canagliflozin 50 mg and metformin hydrochloride 850 mg oral tablet'}], 'text': 'Canagliflozin 50 mg and metformin hydrochloride 850 mg oral tablet'}, 'subject': {'reference': 'Patient/ltc-patient-chen-ming-hui'}, 'effectiveDateTime': '2023-06-01T00:00+08:00', 'performer': [{'actor': {'reference': 'PractitionerRole/ltc-practitioner-role-nurse-example'}}], 'note': [{'time': '2023-06-01T00:00+08:00', 'text': '第二型糖尿病，飯中服用'}], 'dosage': {'route': {'coding': [{'system': 'http://snomed.info/sct', 'code': '26643006', 'display': 'Oral route'}], 'text': '口服'}, 'dose': {'value': 850.0, 'unit': 'mg', 'system': 'http://unitsofmeasure.org', 'code': 'mg'}}}, {'resourceType': 'MedicationAdministration', 'id': '3dfbfe9119016a3ac79205762ffe05e18b19c0f79ba42d9b840372b1', 'status': 'completed', 'medicationCodeableConcept': {'coding': [{'system': 'http://snomed.info/sct', 'code': '771855007', 'display': 'Dexamethasone-containing product in cutaneous dose form'}], 'text': 'Dexamethasone-containing product in cutaneous dose form'}, 'subject': {'reference': 'Patient/ltc-patient-chen-ming-hui'}, 'effectiveDateTime': '2025-02-10T00:00+08:00', 'performer': [{'actor': {'reference': 'PractitionerRole/ltc-practitioner-role-nurse-example'}}], 'note': [{'time': '2025-02-10T00:00+08:00', 'text': '塗抹患部，治療皮膚炎'}], 'dosage': {'route': {'coding': [{'system': 'http://snomed.info/sct', 'code': '6064005', 'display': 'Topical route'}], 'text': '外用'}, 'dose': {'value': 0.1, 'unit': '%', 'system': 'http://unitsofmeasure.org', 'code': '%'}}}, {'resourceType': 'MedicationAdministration', 'id': '1493a00e9e147e326ece9fac6ba57c2d0563f41182032260e369e072', 'status': 'completed', 'medicationCodeableConcept': {'coding': [{'system': 'http://snomed.info/sct', 'code': '126212009', 'display': 'Insulin glargine-containing product'}], 'text': 'Insulin glargine-containing product'}, 'subject': {'reference': 'Patient/ltc-patient-chen-ming-hui'}, 'effectiveDateTime': '2024-08-01T00:00+08:00', 'performer': [{'actor': {'reference': 'PractitionerRole/ltc-practitioner-role-nurse-example'}}], 'note': [{'time': '2024-08-01T00:00+08:00', 'text': '睡前皮下注射，血糖控制'}], 'dosage': {'route': {'coding': [{'system': 'http://snomed.info/sct', 'code': '34206005', 'display': 'SC use'}], 'text': '皮下注射'}, 'dose': {'value': 20.0, 'unit': 'IU', 'system': 'http://unitsofmeasure.org', 'code': 'IU'}}}, {'resourceType': 'MedicationAdministration', 'id': '5fb81abc5455dfe6c2935c695d3ec0f479a7edfe99640acc91cd1753', 'status': 'completed', 'medicationCodeableConcept': {'coding': [{'system': 'http://snomed.info/sct', 'code': '108600003', 'display': 'Atorvastatin-containing product'}], 'text': 'Atorvastatin-containing product'}, 'subject': {'reference': 'Patient/ltc-patient-chen-ming-hui'}, 'effectiveDateTime': '2024-03-15T00:00+08:00', 'performer': [{'actor': {'reference': 'PractitionerRole/ltc-practitioner-role-nurse-example'}}], 'note': [{'time': '2024-03-15T00:00+08:00', 'text': '降膽固醇，晚間服用'}], 'dosage': {'route': {'coding': [{'system': 'http://snomed.info/sct', 'code': '26643006', 'display': 'Oral route'}], 'text': '口服'}, 'dose': {'value': 20.0, 'unit': 'mg', 'system': 'http://unitsofmeasure.org', 'code': 'mg'}}}, {'resourceType': 'MedicationAdministration', 'id': '47740f6e5711b9b7a5a177d27dc7132834da40caae60f4e7fc9ad6eb', 'status': 'completed', 'medicationCodeableConcept': {'coding': [{'system': 'http://snomed.info/sct', 'code': '25673006', 'display': 'Omeprazole-containing product'}], 'text': 'Omeprazole-containing product'}, 'subject': {'reference': 'Patient/ltc-patient-chen-ming-hui'}, 'effectiveDateTime': '2025-02-01T00:00+08:00', 'performer': [{'actor': {'reference': 'PractitionerRole/ltc-practitioner-role-nurse-example'}}], 'note': [{'time': '2025-02-01T00:00+08:00', 'text': '治療胃食道逆流，飯前 30 分鐘'}], 'dosage': {'route': {'coding': [{'system': 'http://snomed.info/sct', 'code': '26643006', 'display': 'Oral route'}], 'text': '口服'}, 'dose': {'value': 20.0, 'unit': 'mg', 'system': 'http://unitsofmeasure.org', 'code': 'mg'}}}, {'resourceType': 'MedicationAdministration', 'id': '8c8a095618b5715b47a26b1cdea91fc54d266d502c6502591dfe4277', 'status': 'completed', 'medicationCodeableConcept': {'coding': [{'system': 'http://snomed.info/sct', 'code': '7947003', 'display': 'Aspirin-containing product'}], 'text': 'Aspirin-containing product'}, 'subject': {'reference': 'Patient/ltc-patient-chen-ming-hui'}, 'effectiveDateTime': '2023-09-20T00:00+08:00', 'performer': [{'actor': {'reference': 'PractitionerRole/ltc-practitioner-role-nurse-example'}}], 'note': [{'time': '2023-09-20T00:00+08:00', 'text': '心血管預防，飯後服用'}], 'dosage': {'route': {'coding': [{'system': 'http://snomed.info/sct', 'code': '26643006', 'display': 'Oral route'}], 'text': '口服'}, 'dose': {'value': 100.0, 'unit': 'mg', 'system': 'http://unitsofmeasure.org', 'code': 'mg'}}}, {'resourceType': 'MedicationAdministration', 'id': '3a6c17b3d50be3c4b218699d4e8aa42646ff9ed388433aa58043b46a', 'status': 'completed', 'medicationCodeableConcept': {'coding': [{'system': 'http://snomed.info/sct', 'code': '768532006', 'display': 'Levothyroxine-containing product'}], 'text': 'Levothyroxine-containing product'}, 'subject': {'reference': 'Patient/ltc-patient-chen-ming-hui'}, 'effectiveDateTime': '2022-12-01T00:00+08:00', 'performer': [{'actor': {'reference': 'PractitionerRole/ltc-practitioner-role-nurse-example'}}], 'note': [{'time': '2022-12-01T00:00+08:00', 'text': '甲狀腺低下，空腹服用'}], 'dosage': {'route': {'coding': [{'system': 'http://snomed.info/sct', 'code': '26643006', 'display': 'Oral route'}], 'text': '口服'}, 'dose': {'value': 75.0, 'unit': 'μg', 'system': 'http://unitsofmeasure.org', 'code': 'μg'}}}]
+        payload = {
+            'resource': response_json_data[0],
+        }
+        with self.client.put(
+            f'/api/v1/update/MedicationAdministration',
+            headers=self.headers,
+            json=payload,
+            name='PUT /api/v1/update/MedicationAdministration',
+            catch_response=True
+        ) as response:
+            if response.status_code == 201:
+                response.success()
+            else:
+                response.failure(f'Unexpected status code: {response.status_code}')
