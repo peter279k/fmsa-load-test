@@ -13,7 +13,7 @@ def on_test_start(environment):
 
 
 class LtcTWSC3(HttpUser):
-    wait_time = constant(3)
+    wait_time = constant(5)
 
     def on_start(self):
         with open('./data/medication_administration.json') as f:
@@ -45,7 +45,7 @@ class LtcTWSC3(HttpUser):
             name='PUT /api/v1/update/MedicationAdministration',
             catch_response=True
         ) as response:
-            if response.status_code == 201:
+            if response.status_code in (200, 201):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')

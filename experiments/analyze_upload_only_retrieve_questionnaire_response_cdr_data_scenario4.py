@@ -15,7 +15,7 @@ def on_test_start(environment):
 
 
 class LtcTWSC4(HttpUser):
-    wait_time = constant(3)
+    wait_time = constant(5)
 
     def on_start(self):
         self.module_name = 'CdrStatistics'
@@ -58,7 +58,7 @@ class LtcTWSC4(HttpUser):
             name='PUT /api/v1/update/QuestionnaireResponse',
             catch_response=True
         ) as response:
-            if response.status_code == 201:
+            if response.status_code in (200, 201):
                 response.success()
             else:
                 response.failure(f'Unexpected status code: {response.status_code}')

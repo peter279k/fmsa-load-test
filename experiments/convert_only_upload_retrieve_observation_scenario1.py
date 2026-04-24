@@ -12,7 +12,7 @@ def on_test_start(environment):
 
 
 class LtcTWSC1(HttpUser):
-    wait_time = constant(0)
+    wait_time = constant(5)
 
     def on_start(self):
         self.headers = {

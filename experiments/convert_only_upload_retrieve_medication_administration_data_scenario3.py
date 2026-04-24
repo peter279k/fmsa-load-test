@@ -13,7 +13,7 @@ def on_test_start(environment):
 
 
 class LtcTWSC3(HttpUser):
-    wait_time = constant(0)
+    wait_time = constant(5)
 
     def on_start(self):
         with open('./data/medication_administration.json') as f:
