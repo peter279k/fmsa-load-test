@@ -39,10 +39,13 @@ do
 
     docker service rm autoscaler
 
-    sleep 300
+    sleep 600
 
     cd ~/fmsa-load-test/experiments
-    ./fmsa-load-test-experiments/bin/python pre_upload_required_references.py
+    for _ in $(1 5)
+    do
+        ./fmsa-load-test-experiments/bin/python pre_upload_required_references.py
+    done;
 
     csv_result=$(echo $file_name | awk '{split($1,a,"."); print a[1]}')
     ./fmsa-load-test-experiments/bin/locust -f $file_name --headless \
