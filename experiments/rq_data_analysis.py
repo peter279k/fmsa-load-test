@@ -9,7 +9,7 @@ from matplotlib.ticker import MaxNLocator
 print('RQ3 experimental data analysis is started.')
 
 dpi = 300
-fontdict={'size': 14}
+fontdict={'size': 12}
 plot_dir = './exp_plot'
 
 if os.path.isdir(plot_dir) is False:
