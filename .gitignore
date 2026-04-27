@@ -2,4 +2,5 @@ data/*
 exp_plot/
 scenarios.txt
 experiments/*.csv
+experiments/*.tar.gz
 experiments/fmsa-load-test-experiments/*
