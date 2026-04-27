@@ -13,7 +13,7 @@ def on_test_start(environment):
 
 
 class LtcTWSC5(HttpUser):
-    wait_time = constant(10)
+    wait_time = constant(20)
 
     def on_start(self):
         with open('./data/location.json') as f:
