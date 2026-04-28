@@ -61,7 +61,7 @@ xlabel = 'Timeline (s)'
 
 for scenario,csv_files in mono_csv_files.items():
     with plt.style.context(['science', 'ieee', 'no-latex']):
-        fig, axs = plt.subplots(nrows=2, ncols=3, layout='constrained', figsize=(3.5, 2.5))
+        fig, axs = plt.subplots(nrows=2, ncols=3, layout='constrained', figsize=(12, 6))
 
         for num in range(0, 3):
             mono_history = pd.read_csv(csv_files[num])
@@ -72,8 +72,13 @@ for scenario,csv_files in mono_csv_files.items():
             length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
             lengths = range(0, length)
 
+            failure_length = min(len(mono_history[ylabel]), len(micro_history[ylabel]))
+
             axs[0, num].xaxis.set_major_locator(MaxNLocator(integer=True))
             axs[0, num].yaxis.set_major_locator(MaxNLocator(integer=True))
+
+            axs[0, num].set_xlim(0, length)
+            axs[0, num].set_ylim(0, failure_length)
 
             axs[0, num].plot(
                 lengths,
