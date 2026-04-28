@@ -73,7 +73,10 @@ for scenario,csv_files in mono_csv_files.items():
                 length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
                 lengths = range(0, length)
 
-                failure_length = min(len(mono_history[ylabel]), len(micro_history[ylabel]))
+                failure_counts = list(mono_history[ylabel])
+                failure_counts.extend(list(micro_history[ylabel]))
+
+                failure_length = max(failure_counts)
 
                 axs[index, num].xaxis.set_major_locator(MaxNLocator(integer=True))
                 axs[index, num].yaxis.set_major_locator(MaxNLocator(integer=True))
