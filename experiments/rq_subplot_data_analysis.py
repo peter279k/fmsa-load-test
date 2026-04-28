@@ -9,7 +9,7 @@ from matplotlib.ticker import MaxNLocator
 print('RQ3 experimental data analysis is started (subplots).')
 
 dpi = 300
-fontdict={'size': 12}
+fontdict={'size': 10}
 plot_dir = './exp_plot'
 
 if os.path.isdir(plot_dir) is False:
@@ -33,7 +33,7 @@ mono_csv_files = {
         'mono_convert_upload_retrieve_medication_administration_data_scenario3_stats_history.csv',
     ],
     'scenario4': [
-        'mono_analyze_only_upload_retrieve_questionnaire_response_cdr_data_scenario4_stats_history.csv'
+        'mono_analyze_only_upload_retrieve_questionnaire_response_cdr_data_scenario4_stats_history.csv',
         'mono_analyze_upload_only_retrieve_questionnaire_response_cdr_data_scenario4_stats_history.csv',
         'mono_analyze_upload_retrieve_questionnaire_response_cdr_data_scenario4_stats_history.csv',
     ],
@@ -67,10 +67,8 @@ for scenario,csv_files in mono_csv_files.items():
         micro_csv_file = micro_csv_files[scenario][index]
 
         mono_history = pd.read_csv(mono_csv_file)
-        mono_history['Timestamp'] = pd.to_datetime(mono_history['Timestamp'], unit='s')
 
         micro_history = pd.read_csv(micro_csv_file)
-        micro_history['Timestamp'] = pd.to_datetime(micro_history['Timestamp'], unit='s')
 
         mono_histories += mono_history,
         micro_histories += micro_history,
@@ -84,19 +82,15 @@ for scenario,csv_files in mono_csv_files.items():
             for num in range(0, 3):
                 axs[0, num].xaxis.set_major_locator(MaxNLocator(integer=True))
                 axs[0, num].yaxis.set_major_locator(MaxNLocator(integer=True))
-                axs[1, num].xaxis.set_major_locator(MaxNLocator(integer=True))
-                axs[1, num].yaxis.set_major_locator(MaxNLocator(integer=True))
-                len(mono_history['Total Failure Count'][0:length])
-                len(micro_history['Total Failure Count'][0:length])
 
                 axs[0, num].plot(
                     lengths,
-                    mono_history['Total Failure Count'][0:length],
+                    history['Total Failure Count'][0:length],
                     label='monolith', color='blue', ls='-', marker=''
                 )
                 axs[0, num].plot(
                     lengths,
-                    micro_history['Total Failure Count'][0:length],
+                    micro_histories[index]['Total Failure Count'][0:length],
                     label='microservice', color='orange', ls='-', marker=''
                 )
 
@@ -105,24 +99,31 @@ for scenario,csv_files in mono_csv_files.items():
                 axs[0, num].set_xlabel(xlabel, fontdict=fontdict)
                 axs[0, num].set_ylabel('Total Failure Count', fontdict=fontdict)
 
+            for num in range(0, 3):
+                axs[1, num].xaxis.set_major_locator(MaxNLocator(integer=True))
+                axs[1, num].yaxis.set_major_locator(MaxNLocator(integer=True))
+
                 axs[1, num].plot(
                     lengths,
-                    mono_history['Total Average Response Time'][0:length],
+                    history['Total Average Response Time'][0:length],
                     label='monolith', color='blue', ls='-', marker=''
                 )
                 axs[1, num].plot(
                     lengths,
-                    micro_history['Total Average Response Time'][0:length],
+                    micro_histories[index]['Total Average Response Time'][0:length],
                     label='microservice', color='orange', ls='-', marker=''
                 )
 
                 axs[1, num].legend()
 
                 axs[1, num].set_xlabel(xlabel, fontdict=fontdict)
-                axs[1, num].set_ylabel('Total Average Response Time', fontdict=fontdict)
+                axs[1, num].set_ylabel('Average Response Time', fontdict=fontdict)
+
+
+        plt.tight_layout()
 
         fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.svg', dpi=dpi)
         fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.png', dpi=dpi)
         plt.close()
 
-        print(f'RQ3 experimental {mono_csv_file} and {micro_csv_file} data analysis (subplots) is finished.')
+        print(f'RQ3 experimental {mono_csv_file} and {micro_csv_file} data analysis (subplots) is finished.\n')
