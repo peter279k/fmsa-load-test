@@ -86,14 +86,11 @@ for scenario,csv_files in mono_csv_files.items():
 
             axs[0, num].legend()
 
-            axs[0, num].annotate(
-                f'', lengths,
-                transform=axs[0, num].transAxes,
-                ha='center', va='center', fontsize=fontdict,
-            )
+            for ax in axs.flat:
+                ax.set(xlabel=xlabel, ylabel=ylabel)
 
-            # axs[0, num].set_xlabel(xlabel, fontdict=fontdict)
-            # axs[0, num].set_ylabel(ylabel, fontdict=fontdict)
+            for ax in axs.flat:
+                ax.label_outer()
 
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.svg', dpi=dpi)
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.png', dpi=dpi)
