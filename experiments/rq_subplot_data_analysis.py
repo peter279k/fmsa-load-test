@@ -58,7 +58,7 @@ for scenario,csv_files in mono_csv_files.items():
         micro_csv_files[scenario] += csv_file[5:],
 
 
-xlabel = 'Timeline (s)'
+xlabel = 'Timeline (ms)'
 
 for scenario,csv_files in mono_csv_files.items():
     with plt.style.context(['science', 'ieee', 'no-latex']):
@@ -73,7 +73,7 @@ for scenario,csv_files in mono_csv_files.items():
                 y_label = 'Cumulative Failure Count'
                 if index == 1:
                     ylabel = 'Total Average Response Time'
-                    y_label = 'Average Response Timr'
+                    y_label = 'Average Response Time'
 
                 length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
                 lengths = range(0, length)
@@ -100,13 +100,16 @@ for scenario,csv_files in mono_csv_files.items():
                     label='microservice', color='orange', ls='-', marker=''
                 )
 
-                axs[index, num].set_ylabel(y_label, fontsize=11)
+                if index == 0 and num == 0:
+                    axs[index, num].set_ylabel(y_label, fontsize=11)
+                if index == 1 and num == 0:
+                    axs[index, num].set_ylabel(y_label, fontsize=11)
 
                 axs[index, num].set_title(f'({titles[index][num]})', y=-0.4)
 
                 axs[index, num].legend()
 
-        fig.supxlabel('Timeline(s)', fontsize=11)
+        fig.supxlabel(xlabel, fontsize=11)
         fig.suptitle(f'S{scenario[1:]}', fontsize=15)
 
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.svg', dpi=dpi)
