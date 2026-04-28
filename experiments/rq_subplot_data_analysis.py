@@ -100,13 +100,13 @@ for scenario,csv_files in mono_csv_files.items():
                     label='microservice', color='orange', ls='-', marker=''
                 )
 
-                axs[index, num].set_ylabel(y_label)
+                axs[index, num].set_ylabel(y_label, fontsize=11)
 
-                axs[index, num].set_title(titles[index][num], y=-0.2)
+                axs[index, num].set_title(f'({titles[index][num]})', y=-0.4)
 
                 axs[index, num].legend()
 
-        fig.supxlabel('Timeline(s)')
+        fig.supxlabel('Timeline(s)', fontsize=11)
         fig.suptitle(f'S{scenario[1:]}', fontsize=15)
 
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.svg', dpi=dpi)
