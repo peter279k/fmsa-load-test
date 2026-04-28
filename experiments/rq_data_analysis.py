@@ -69,5 +69,5 @@ for index,csv_file in enumerate(mono_csv_files):
         plt.close()
 
 
-    print(f'RQ3 experimental {mono_csv_file} data analysis is finished.')
-    print(f'RQ3 experimental {micro_csv_file} data analysis is finished.')
+    print(f'RQ3 experimental {mono_csv_file} data analysis is finished(subplot).')
+    print(f'RQ3 experimental {micro_csv_file} data analysis is finished(subplot).')
