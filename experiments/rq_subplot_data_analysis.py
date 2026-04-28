@@ -61,40 +61,36 @@ for scenario,csv_files in mono_csv_files.items():
     with plt.style.context(['science', 'ieee', 'no-latex']):
         fig, axs = plt.subplots(nrows=2, ncols=3)
 
-        for index in range(0, 2):
-            if index == 0:
-                ylabel = 'Total Failure Count'
-            else:
-                ylabel = 'Total Average Response Time'
+        for num in range(0, 3):
+            mono_history = pd.read_csv(csv_files[num])
+            micro_history = pd.read_csv(csv_files[num])
 
-            for j in range(0, 3):
-                mono_history = pd.read_csv(csv_files[j])
-                micro_history = pd.read_csv(csv_files[j])
+            ylabel = 'Total Failure Count'
 
-                length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
-                lengths = range(0, length)
+            length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
+            lengths = range(0, length)
 
-                axs[index, j].xaxis.set_major_locator(MaxNLocator(integer=True))
-                axs[index, j].yaxis.set_major_locator(MaxNLocator(integer=True))
+            axs[0, num].xaxis.set_major_locator(MaxNLocator(integer=True))
+            axs[0, num].yaxis.set_major_locator(MaxNLocator(integer=True))
 
-                axs[index, j].plot(
-                    lengths,
-                    mono_history[ylabel][0:length],
-                    label='monolith', color='blue', ls='-', marker=''
-                )
-                axs[index, j].plot(
-                    lengths,
-                    micro_history[ylabel][0:length],
-                    label='microservice', color='orange', ls='-', marker=''
-                )
+            axs[0, num].plot(
+                lengths,
+                mono_history[ylabel][0:length],
+                label='monolith', color='blue', ls='-', marker=''
+            )
+            axs[0, num].plot(
+                lengths,
+                micro_history[ylabel][0:length],
+                label='microservice', color='orange', ls='-', marker=''
+            )
 
-                axs[index, j].legend()
+            axs[0, num].legend()
 
-                axs[index, j].set_xlabel(xlabel, fontdict=fontdict)
-                axs[index, j].set_ylabel(ylabel, fontdict=fontdict)
+            axs[0, num].set_xlabel(xlabel, fontdict=fontdict)
+            axs[0, num].set_ylabel(ylabel, fontdict=fontdict)
 
-        fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.svg', dpi=dpi)
-        fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.png', dpi=dpi)
+        fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.svg', dpi=dpi)
+        fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.png', dpi=dpi)
         plt.close()
 
         print(f'RQ3 experimental {scenario} data analysis (subplots) is finished.\n')
