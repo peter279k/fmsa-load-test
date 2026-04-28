@@ -54,7 +54,7 @@ micro_csv_files = {}
 for scenario,csv_files in mono_csv_files.items():
     micro_csv_files[scenario] = []
     for csv_file in csv_files:
-        micro_csv_files[scenario] += csv_file,
+        micro_csv_files[scenario] += csv_file[5:],
 
 
 xlabel = 'Timeline (s)'
