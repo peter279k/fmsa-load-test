@@ -75,13 +75,17 @@ for scenario,csv_files in mono_csv_files.items():
 
     with plt.style.context(['science', 'ieee', 'no-latex']):
         fig, axs = plt.subplots(nrows=2, ncols=3)
-        ylabel = 'Total Failure Count'
-
-        length = min(len(mono_histories[0]['Timestamp']), len(micro_histories[0]['Timestamp']))
-        lengths = range(0, length)
 
         for index in range(0, 2):
+            if index == 0:
+                ylabel = 'Total Failure Count'
+            else:
+                ylabel = 'Total Average Response Time'
+
             for j in range(0, 3):
+                length = min(len(mono_histories[j]['Timestamp']), len(micro_histories[j]['Timestamp']))
+                lengths = range(0, length)
+
                 axs[index, j].xaxis.set_major_locator(MaxNLocator(integer=True))
                 axs[index, j].yaxis.set_major_locator(MaxNLocator(integer=True))
 
