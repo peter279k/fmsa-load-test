@@ -38,3 +38,4 @@ locust -f {load_test_file.py} --headless \
 # References
 
 - https://oneuptime.com/blog/post/2026-01-28-analyze-locust-test-results/view
+- https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplots_demo.html
