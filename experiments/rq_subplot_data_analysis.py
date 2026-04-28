@@ -83,7 +83,8 @@ for scenario,csv_files in mono_csv_files.items():
                 micro_history = micro_history.set_index('Timestamp')
                 micro_history = micro_history.resample('1s').mean(numeric_only=True).ffill()
 
-                lengths = range(1199)
+                length = min(len(mono_history[ylabel].to_list()), len(micro_history[ylabel].to_list()))
+                lengths = range(length)
 
                 failure_counts = list(mono_history[ylabel].tolist())
                 failure_counts.extend(list(micro_history[ylabel].tolist()))
@@ -98,12 +99,12 @@ for scenario,csv_files in mono_csv_files.items():
 
                 axs[index, num].plot(
                     lengths,
-                    mono_history[ylabel],
+                    mono_history[ylabel][0:length],
                     label='monolith', color='blue', ls='-', marker=''
                 )
                 axs[index, num].plot(
                     lengths,
-                    micro_history[ylabel],
+                    micro_history[ylabel][0:length],
                     label='microservice', color='orange', ls='-', marker=''
                 )
 
