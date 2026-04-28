@@ -58,7 +58,7 @@ for scenario,csv_files in mono_csv_files.items():
         micro_csv_files[scenario] += csv_file[5:],
 
 
-xlabel = 'Timeline (ms)'
+xlabel = 'Timeline (s)'
 
 for scenario,csv_files in mono_csv_files.items():
     with plt.style.context(['science', 'ieee', 'no-latex']):
@@ -73,7 +73,7 @@ for scenario,csv_files in mono_csv_files.items():
                 y_label = 'Cumulative Failure Count'
                 if index == 1:
                     ylabel = 'Total Average Response Time'
-                    y_label = 'Average Response Time'
+                    y_label = 'Average Response Time (ms)'
 
                 length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
                 lengths = range(0, length)
