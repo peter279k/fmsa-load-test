@@ -75,9 +75,11 @@ for scenario,csv_files in mono_csv_files.items():
                     ylabel = 'Total Average Response Time'
                     y_label = 'Average Response Time (ms)'
 
+                mono_history['Timestamp'] = pd.to_datetime(mono_history['Timestamp'], unit='s')
                 mono_history = mono_history.set_index('Timestamp')
                 mono_history = mono_history.resample('1s').mean().ffill()
 
+                micro_history['Timestamp'] = pd.to_datetime(micro_history['Timestamp'], unit='s')
                 micro_history = micro_history.set_index('Timestamp')
                 micro_history = micro_history.resample('1s').mean().ffill()
 
