@@ -89,8 +89,11 @@ for scenario,csv_files in mono_csv_files.items():
             axs[0, num].set_xlabel(xlabel, fontdict=fontdict)
             axs[0, num].set_ylabel(ylabel, fontdict=fontdict)
 
+        plt.tight_layout()
+
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.svg', dpi=dpi)
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.png', dpi=dpi)
+
         plt.close()
 
         print(f'RQ3 experimental {scenario} data analysis (subplots) is finished.\n')
