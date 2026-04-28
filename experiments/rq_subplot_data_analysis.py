@@ -86,6 +86,8 @@ for scenario,csv_files in mono_csv_files.items():
                 axs[0, num].yaxis.set_major_locator(MaxNLocator(integer=True))
                 axs[1, num].xaxis.set_major_locator(MaxNLocator(integer=True))
                 axs[1, num].yaxis.set_major_locator(MaxNLocator(integer=True))
+                len(mono_history['Total Failure Count'][0:length])
+                len(micro_history['Total Failure Count'][0:length])
 
                 axs[0, num].plot(
                     lengths,
