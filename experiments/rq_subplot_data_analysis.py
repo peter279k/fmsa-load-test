@@ -77,11 +77,11 @@ for scenario,csv_files in mono_csv_files.items():
 
                 mono_history['Timestamp'] = pd.to_datetime(mono_history['Timestamp'], unit='s')
                 mono_history = mono_history.set_index('Timestamp')
-                mono_history = mono_history.resample('1s').mean().ffill()
+                mono_history = mono_history.resample('1s').mean(numeric_only=True).ffill()
 
                 micro_history['Timestamp'] = pd.to_datetime(micro_history['Timestamp'], unit='s')
                 micro_history = micro_history.set_index('Timestamp')
-                micro_history = micro_history.resample('1s').mean().ffill()
+                micro_history = micro_history.resample('1s').mean(numeric_only=True).ffill()
 
                 lengths = range(1200)
 
