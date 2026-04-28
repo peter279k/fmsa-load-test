@@ -75,8 +75,13 @@ for scenario,csv_files in mono_csv_files.items():
                     ylabel = 'Total Average Response Time'
                     y_label = 'Average Response Time (ms)'
 
-                length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
-                lengths = range(0, length)
+                mono_history = mono_history.set_index('Timestamp')
+                mono_history = mono_history.resample('1s').mean().ffill()
+
+                micro_history = micro_history.set_index('Timestamp')
+                micro_history = micro_history.resample('1s').mean().ffill()
+
+                lengths = range(1200)
 
                 failure_counts = list(mono_history[ylabel].tolist())
                 failure_counts.extend(list(micro_history[ylabel].tolist()))
@@ -86,17 +91,17 @@ for scenario,csv_files in mono_csv_files.items():
                 axs[index, num].xaxis.set_major_locator(MaxNLocator(integer=True))
                 axs[index, num].yaxis.set_major_locator(MaxNLocator(integer=True))
 
-                axs[index, num].set_xlim(0, length)
+                axs[index, num].set_xlim(0, 1200)
                 axs[index, num].set_ylim(0, failure_length)
 
                 axs[index, num].plot(
                     lengths,
-                    mono_history[ylabel][0:length],
+                    mono_history[ylabel],
                     label='monolith', color='blue', ls='-', marker=''
                 )
                 axs[index, num].plot(
                     lengths,
-                    micro_history[ylabel][0:length],
+                    micro_history[ylabel],
                     label='microservice', color='orange', ls='-', marker=''
                 )
 
