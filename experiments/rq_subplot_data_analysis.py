@@ -100,7 +100,7 @@ for scenario,csv_files in mono_csv_files.items():
 
                 axs[index, num].set_ylabel(ylabel)
 
-                axs[index, num].set_title(titles[index, num], y=-0.2)
+                axs[index, num].set_title(titles[index][num], y=-0.2)
 
                 axs[index, num].legend()
 
