@@ -56,10 +56,12 @@ for scenario,csv_files in mono_csv_files.items():
 
 
 xlabel = 'Timeline (s)'
-ylabel = 'Total Average Response Time'
 
 for scenario,csv_files in mono_csv_files.items():
+    mono_histories = []
+    micro_histories = []
     print(f'Drawing the {scenario} subplot')
+
     for index,csv_file in enumerate(csv_files):
         mono_csv_file = csv_file
         micro_csv_file = micro_csv_files[scenario][index]
@@ -70,35 +72,52 @@ for scenario,csv_files in mono_csv_files.items():
         micro_history = pd.read_csv(micro_csv_file)
         micro_history['Timestamp'] = pd.to_datetime(micro_history['Timestamp'], unit='s')
 
-        print(f'Processing and Drawing the RQ3 of {scenario} {csv_file} data.')
+        mono_histories += mono_history,
+        micro_histories += micro_history,
 
-        with plt.style.context(['science', 'ieee', 'no-latex']):
-            fig, axs = plt.subplots(nrows=2, ncols=3)
-            ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-            ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+    with plt.style.context(['science', 'ieee', 'no-latex']):
+        fig, axs = plt.subplots(nrows=2, ncols=3)
+        axs.xaxis.set_major_locator(MaxNLocator(integer=True))
+        axs.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-            length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
+        for index, mono_history in enumerate(mono_histories):
+            length = min(len(mono_history['Timestamp']), len(micro_history[index]['Timestamp']))
+            lengths = range(0, length)
+            for num in range(0, 3):
+                axs[0, num].plot(
+                    lengths,
+                    mono_history['Total Failure Count'][0:length],
+                    label='monolith', color='blue', ls='-', marker=''
+                )
+                axs[0, num].plot(
+                    lengths,
+                    micro_history['Total Failure Count'][0:length],
+                    label='microservice', color='orange', ls='-', marker=''
+                )
 
-            ax[0].plot(
-                range(0, length),
-                mono_history['Total Average Response Time'][0:length],
-                label='monolith', color='blue', ls='-', marker=''
-            )
-            ax[0].plot(
-                range(0, length),
-                micro_history['Total Average Response Time'][0:length],
-                label='microservice', color='orange', ls='-', marker=''
-            )
+                axs[0, num].legend()
 
-            ax.legend()
+                axs[0, num].set_xlabel(xlabel, fontdict=fontdict)
+                axs[0, num].set_ylabel('Total Failure Count', fontdict=fontdict)
 
-            ax.set_xlabel(xlabel, fontdict=fontdict)
-            ax.set_ylabel(ylabel, fontdict=fontdict)
+                axs[1, num].plot(
+                    lengths,
+                    mono_history['Total Average Response Time'][0:length],
+                    label='monolith', color='blue', ls='-', marker=''
+                )
+                axs[1, num].plot(
+                    lengths,
+                    micro_history['Total Average Response Time'][0:length],
+                    label='microservice', color='orange', ls='-', marker=''
+                )
 
-            fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.svg', dpi=dpi)
-            fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.png', dpi=dpi)
-            plt.close()
+                axs[1, num].legend()
 
+                axs[1, num].set_xlabel(xlabel, fontdict=fontdict)
+                axs[1, num].set_ylabel('Total Average Response Time', fontdict=fontdict)
 
-        print(f'RQ3 experimental {mono_csv_file} data analysis is finished.')
-        print(f'RQ3 experimental {micro_csv_file} data analysis is finished.')
+        fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.svg', dpi=dpi)
+        fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.png', dpi=dpi)
+        plt.close()
+
+        print(f'RQ3 experimental {mono_csv_file} and {micro_csv_file} data analysis (subplots) is finished.')
