@@ -61,43 +61,44 @@ xlabel = 'Timeline (s)'
 
 for scenario,csv_files in mono_csv_files.items():
     with plt.style.context(['science', 'ieee', 'no-latex']):
-        fig, axs = plt.subplots(nrows=2, ncols=3, layout='constrained', figsize=(12, 6))
+        fig, axs = plt.subplots(nrows=2, ncols=3, layout='constrained', figsize=(9, 4))
 
-        for num in range(0, 3):
-            mono_history = pd.read_csv(csv_files[num])
-            micro_history = pd.read_csv(micro_csv_files[scenario][num])
+        for index in range(0, 2):
+            for num in range(0, 3):
+                mono_history = pd.read_csv(csv_files[num])
+                micro_history = pd.read_csv(micro_csv_files[scenario][num])
 
-            ylabel = 'Total Failure Count'
+                ylabel = 'Total Failure Count'
 
-            length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
-            lengths = range(0, length)
+                length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
+                lengths = range(0, length)
 
-            failure_length = min(len(mono_history[ylabel]), len(micro_history[ylabel]))
+                failure_length = min(len(mono_history[ylabel]), len(micro_history[ylabel]))
 
-            axs[0, num].xaxis.set_major_locator(MaxNLocator(integer=True))
-            axs[0, num].yaxis.set_major_locator(MaxNLocator(integer=True))
+                axs[index, num].xaxis.set_major_locator(MaxNLocator(integer=True))
+                axs[index, num].yaxis.set_major_locator(MaxNLocator(integer=True))
 
-            axs[0, num].set_xlim(0, length)
-            axs[0, num].set_ylim(0, failure_length)
+                axs[index, num].set_xlim(0, length)
+                axs[index, num].set_ylim(0, failure_length)
 
-            axs[0, num].plot(
-                lengths,
-                mono_history[ylabel][0:length],
-                label='monolith', color='blue', ls='-', marker=''
-            )
-            axs[0, num].plot(
-                lengths,
-                micro_history[ylabel][0:length],
-                label='microservice', color='orange', ls='-', marker=''
-            )
+                axs[index, num].plot(
+                    lengths,
+                    mono_history[ylabel][0:length],
+                    label='monolith', color='blue', ls='-', marker=''
+                )
+                axs[index, num].plot(
+                    lengths,
+                    micro_history[ylabel][0:length],
+                    label='microservice', color='orange', ls='-', marker=''
+                )
 
-            axs[0, num].legend()
+                axs[index, num].legend()
 
-            for ax in axs.flat:
-                ax.set(xlabel=xlabel, ylabel=ylabel)
+                for ax in axs.flat:
+                    ax.set(xlabel=xlabel, ylabel=ylabel)
 
-            for ax in axs.flat:
-                ax.label_outer()
+                for ax in axs.flat:
+                    ax.label_outer()
 
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.svg', dpi=dpi)
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.png', dpi=dpi)
