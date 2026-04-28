@@ -78,8 +78,8 @@ for scenario,csv_files in mono_csv_files.items():
     with plt.style.context(['science', 'ieee', 'no-latex']):
         fig, axs = plt.subplots(nrows=2, ncols=3)
 
-        for index, mono_history in enumerate(mono_histories):
-            length = min(len(mono_history['Timestamp']), len(micro_history[index]['Timestamp']))
+        for index, history in enumerate(mono_histories):
+            length = min(len(history['Timestamp']), len(micro_histories[index]['Timestamp']))
             lengths = range(0, length)
             for num in range(0, 3):
                 axs[0, num].xaxis.set_major_locator(MaxNLocator(integer=True))
