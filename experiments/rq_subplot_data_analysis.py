@@ -78,9 +78,6 @@ for scenario,csv_files in mono_csv_files.items():
                 length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
                 lengths = range(0, length)
 
-                mono_history['Timestamp'] = pd.to_datetime(mono_history['Timestamp'], unit='s')
-                micro_history['Timestamp'] = pd.to_datetime(micro_history['Timestamp'], unit='s')
-
                 failure_counts = list(mono_history[ylabel].tolist())
                 failure_counts.extend(list(micro_history[ylabel].tolist()))
 
@@ -89,16 +86,16 @@ for scenario,csv_files in mono_csv_files.items():
                 axs[index, num].xaxis.set_major_locator(MaxNLocator(integer=True))
                 axs[index, num].yaxis.set_major_locator(MaxNLocator(integer=True))
 
-                #axs[index, num].set_xlim(0, length)
+                axs[index, num].set_xlim(0, length)
                 axs[index, num].set_ylim(0, failure_length)
 
                 axs[index, num].plot(
-                    mono_history['Timestamp'].to_list()[0:length],
+                    lengths,
                     mono_history[ylabel][0:length],
                     label='monolith', color='blue', ls='-', marker=''
                 )
                 axs[index, num].plot(
-                    micro_history['Timestamp'].to_list()[0:length],
+                    lengths,
                     micro_history[ylabel][0:length],
                     label='microservice', color='orange', ls='-', marker=''
                 )
