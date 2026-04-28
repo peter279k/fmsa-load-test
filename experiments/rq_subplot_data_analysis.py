@@ -9,7 +9,7 @@ from matplotlib.ticker import MaxNLocator
 print('RQ3 experimental data analysis is started (subplots).')
 
 dpi = 300
-fontdict={'size': 10}
+fontdict={'size': 15}
 plot_dir = './exp_plot'
 
 if os.path.isdir(plot_dir) is False:
@@ -59,7 +59,7 @@ xlabel = 'Timeline (s)'
 
 for scenario,csv_files in mono_csv_files.items():
     with plt.style.context(['science', 'ieee', 'no-latex']):
-        fig, axs = plt.subplots(nrows=2, ncols=3)
+        fig, axs = plt.subplots(nrows=2, ncols=3, layout='constrained', figsize=(5.5, 3.5))
 
         for num in range(0, 3):
             mono_history = pd.read_csv(csv_files[num])
@@ -86,10 +86,14 @@ for scenario,csv_files in mono_csv_files.items():
 
             axs[0, num].legend()
 
-            axs[0, num].set_xlabel(xlabel, fontdict=fontdict)
-            axs[0, num].set_ylabel(ylabel, fontdict=fontdict)
+            axs[0, num].annotate(
+                f'', lengths,
+                transform=axs[0, num].transAxes,
+                ha='center', va='center', fontsize=fontdict,
+            )
 
-        plt.tight_layout()
+            # axs[0, num].set_xlabel(xlabel, fontdict=fontdict)
+            # axs[0, num].set_ylabel(ylabel, fontdict=fontdict)
 
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.svg', dpi=dpi)
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.png', dpi=dpi)
