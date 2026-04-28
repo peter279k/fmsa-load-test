@@ -70,7 +70,7 @@ for scenario,csv_files in mono_csv_files.items():
 
                 ylabel = 'Total Failure Count'
 
-                length = max(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
+                length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
                 lengths = range(0, length)
 
                 failure_counts = list(mono_history[ylabel].tolist())
