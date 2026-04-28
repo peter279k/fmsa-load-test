@@ -93,12 +93,12 @@ for scenario,csv_files in mono_csv_files.items():
                 axs[index, num].set_ylim(0, failure_length)
 
                 axs[index, num].plot(
-                    mono_history['Timestamp'],
+                    mono_history['Timestamp'].to_list()[0:length],
                     mono_history[ylabel][0:length],
                     label='monolith', color='blue', ls='-', marker=''
                 )
                 axs[index, num].plot(
-                    micro_history['Timestamp'],
+                    micro_history['Timestamp'].to_list()[0:length],
                     micro_history[ylabel][0:length],
                     label='microservice', color='orange', ls='-', marker=''
                 )
