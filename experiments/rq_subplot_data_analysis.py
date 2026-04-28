@@ -97,12 +97,6 @@ for scenario,csv_files in mono_csv_files.items():
 
                 axs[index, num].legend()
 
-                for ax in axs.flat:
-                    ax.set(xlabel=xlabel, ylabel=ylabel)
-
-                for ax in axs.flat:
-                    ax.label_outer()
-
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.svg', dpi=dpi)
         fig.savefig(f'{plot_dir}/fig_rq3_{scenario}_result.png', dpi=dpi)
 
