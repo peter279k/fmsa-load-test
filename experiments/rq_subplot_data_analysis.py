@@ -70,8 +70,10 @@ for scenario,csv_files in mono_csv_files.items():
                 micro_history = pd.read_csv(micro_csv_files[scenario][num])
 
                 ylabel = 'Total Failure Count'
+                y_label = 'Cumulative Failure Count'
                 if index == 1:
-                    ylabel = 'Average Response Time'
+                    ylabel = 'Total Average Response Time'
+                    y_label = 'Average Response Timr'
 
                 length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
                 lengths = range(0, length)
@@ -98,7 +100,7 @@ for scenario,csv_files in mono_csv_files.items():
                     label='microservice', color='orange', ls='-', marker=''
                 )
 
-                axs[index, num].set_ylabel(ylabel)
+                axs[index, num].set_ylabel(y_label)
 
                 axs[index, num].set_title(titles[index][num], y=-0.2)
 
