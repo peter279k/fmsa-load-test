@@ -52,14 +52,16 @@ mono_csv_files = {
 micro_csv_files = {}
 
 for scenario,csv_files in mono_csv_files.items():
-    micro_csv_files[scenario] = list(csv_files)
+    micro_csv_files[scenario] = []
+    for csv_file in csv_files:
+        micro_csv_files[scenario] += csv_file,
 
 
 xlabel = 'Timeline (s)'
 
 for scenario,csv_files in mono_csv_files.items():
     with plt.style.context(['science', 'ieee', 'no-latex']):
-        fig, axs = plt.subplots(nrows=2, ncols=3, layout='constrained', figsize=(5.5, 3.5))
+        fig, axs = plt.subplots(nrows=2, ncols=3, layout='constrained', figsize=(6, 3.5))
 
         for num in range(0, 3):
             mono_history = pd.read_csv(csv_files[num])
