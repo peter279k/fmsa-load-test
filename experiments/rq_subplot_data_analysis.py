@@ -58,21 +58,6 @@ for scenario,csv_files in mono_csv_files.items():
 xlabel = 'Timeline (s)'
 
 for scenario,csv_files in mono_csv_files.items():
-    mono_histories = []
-    micro_histories = []
-    print(f'Drawing the {scenario} subplot')
-
-    for index,csv_file in enumerate(csv_files):
-        mono_csv_file = csv_file
-        micro_csv_file = micro_csv_files[scenario][index]
-
-        mono_history = pd.read_csv(mono_csv_file)
-
-        micro_history = pd.read_csv(micro_csv_file)
-
-        mono_histories += mono_history,
-        micro_histories += micro_history,
-
     with plt.style.context(['science', 'ieee', 'no-latex']):
         fig, axs = plt.subplots(nrows=2, ncols=3)
 
@@ -83,7 +68,10 @@ for scenario,csv_files in mono_csv_files.items():
                 ylabel = 'Total Average Response Time'
 
             for j in range(0, 3):
-                length = min(len(mono_histories[j]['Timestamp']), len(micro_histories[j]['Timestamp']))
+                mono_history = pd.read_csv(csv_files[j])
+                micro_history = pd.read_csv(csv_files[j])
+
+                length = min(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
                 lengths = range(0, length)
 
                 axs[index, j].xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -91,12 +79,12 @@ for scenario,csv_files in mono_csv_files.items():
 
                 axs[index, j].plot(
                     lengths,
-                    mono_histories[j][ylabel][0:length],
+                    mono_history[ylabel][0:length],
                     label='monolith', color='blue', ls='-', marker=''
                 )
                 axs[index, j].plot(
                     lengths,
-                    micro_histories[j][ylabel][0:length],
+                    micro_history[ylabel][0:length],
                     label='microservice', color='orange', ls='-', marker=''
                 )
 
@@ -109,4 +97,4 @@ for scenario,csv_files in mono_csv_files.items():
         fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.png', dpi=dpi)
         plt.close()
 
-        print(f'RQ3 experimental {mono_csv_file} and {micro_csv_file} data analysis (subplots) is finished.\n')
+        print(f'RQ3 experimental {scenario} data analysis (subplots) is finished.\n')
