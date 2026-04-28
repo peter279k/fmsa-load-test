@@ -83,7 +83,7 @@ for scenario,csv_files in mono_csv_files.items():
                 micro_history = micro_history.set_index('Timestamp')
                 micro_history = micro_history.resample('1s').mean(numeric_only=True).ffill()
 
-                lengths = range(1200)
+                lengths = range(1199)
 
                 failure_counts = list(mono_history[ylabel].tolist())
                 failure_counts.extend(list(micro_history[ylabel].tolist()))
