@@ -61,11 +61,11 @@ xlabel = 'Timeline (s)'
 
 for scenario,csv_files in mono_csv_files.items():
     with plt.style.context(['science', 'ieee', 'no-latex']):
-        fig, axs = plt.subplots(nrows=2, ncols=3, layout='constrained', figsize=(6, 3.5))
+        fig, axs = plt.subplots(nrows=2, ncols=3, layout='constrained', figsize=(3.5, 2.5))
 
         for num in range(0, 3):
             mono_history = pd.read_csv(csv_files[num])
-            micro_history = pd.read_csv(csv_files[num])
+            micro_history = pd.read_csv(micro_csv_files[scenario][num])
 
             ylabel = 'Total Failure Count'
 
