@@ -76,49 +76,34 @@ for scenario,csv_files in mono_csv_files.items():
     with plt.style.context(['science', 'ieee', 'no-latex']):
         fig, axs = plt.subplots(nrows=2, ncols=3)
 
-        for index, history in enumerate(mono_histories):
-            length = min(len(history['Timestamp']), len(micro_histories[index]['Timestamp']))
-            lengths = range(0, length)
-            for num in range(0, 3):
-                axs[0, num].xaxis.set_major_locator(MaxNLocator(integer=True))
-                axs[0, num].yaxis.set_major_locator(MaxNLocator(integer=True))
+        for index in range(0, 2):
+            if index == 0:
+                ylabel = 'Total Failure Count'
+            else:
+                ylabel = 'Total Average Response Time'
 
-                axs[0, num].plot(
+            for j in range(0, 3):
+                length = min(len(mono_histories[j]['Timestamp']), len(micro_histories[j]['Timestamp']))
+                lengths = range(0, length)
+
+                axs[index, j].xaxis.set_major_locator(MaxNLocator(integer=True))
+                axs[index, j].yaxis.set_major_locator(MaxNLocator(integer=True))
+
+                axs[index, j].plot(
                     lengths,
-                    history['Total Failure Count'][0:length],
+                    mono_histories[0][ylabel][0:length],
                     label='monolith', color='blue', ls='-', marker=''
                 )
-                axs[0, num].plot(
+                axs[index, j].plot(
                     lengths,
-                    micro_histories[index]['Total Failure Count'][0:length],
+                    micro_histories[0][ylabel][0:length],
                     label='microservice', color='orange', ls='-', marker=''
                 )
 
-                axs[0, num].legend()
+                axs[index, j].legend()
 
-                axs[0, num].set_xlabel(xlabel, fontdict=fontdict)
-                axs[0, num].set_ylabel('Total Failure Count', fontdict=fontdict)
-
-            for num in range(0, 3):
-                axs[1, num].xaxis.set_major_locator(MaxNLocator(integer=True))
-                axs[1, num].yaxis.set_major_locator(MaxNLocator(integer=True))
-
-                axs[1, num].plot(
-                    lengths,
-                    history['Total Average Response Time'][0:length],
-                    label='monolith', color='blue', ls='-', marker=''
-                )
-                axs[1, num].plot(
-                    lengths,
-                    micro_histories[index]['Total Average Response Time'][0:length],
-                    label='microservice', color='orange', ls='-', marker=''
-                )
-
-                axs[1, num].legend()
-
-                axs[1, num].set_xlabel(xlabel, fontdict=fontdict)
-                axs[1, num].set_ylabel('Average Response Time', fontdict=fontdict)
-
+                axs[index, j].set_xlabel(xlabel, fontdict=fontdict)
+                axs[index, j].set_ylabel(ylabel, fontdict=fontdict)
 
         plt.tight_layout()
 
