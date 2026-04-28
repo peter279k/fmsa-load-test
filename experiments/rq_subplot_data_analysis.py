@@ -18,34 +18,34 @@ if os.path.isdir(plot_dir) is False:
 
 mono_csv_files = {
     'scenario1': [
-        'mono_convert_only_upload_retrieve_observation_scenario1_stats.csv',
-        'mono_convert_upload_only_retrieve_observation_scenario1_stats.csv',
-        'mono_convert_upload_retrieve_observation_scenario1_stats.csv',
+        'mono_convert_only_upload_retrieve_observation_scenario1_stats_history.csv',
+        'mono_convert_upload_only_retrieve_observation_scenario1_stats_history.csv',
+        'mono_convert_upload_retrieve_observation_scenario1_stats_history.csv',
     ],
     'scenario2': [
-        'mono_convert_only_upload_retrieve_procedure_scenario2_stats.csv',
-        'mono_convert_upload_only_retrieve_procedure_scenario2_stats.csv',
-        'mono_convert_upload_retrieve_procedure_scenario2_stats.csv',
+        'mono_convert_only_upload_retrieve_procedure_scenario2_stats_history.csv',
+        'mono_convert_upload_only_retrieve_procedure_scenario2_stats_history.csv',
+        'mono_convert_upload_retrieve_procedure_scenario2_stats_history.csv',
     ],
     'scenario3': [
-        'mono_convert_only_upload_retrieve_medication_administration_data_scenario3_stats.csv',
-        'mono_convert_upload_only_retrieve_medication_administration_data_scenario3_stats.csv',
-        'mono_convert_upload_retrieve_medication_administration_data_scenario3_stats.csv',
+        'mono_convert_only_upload_retrieve_medication_administration_data_scenario3_stats_history.csv',
+        'mono_convert_upload_only_retrieve_medication_administration_data_scenario3_stats_history.csv',
+        'mono_convert_upload_retrieve_medication_administration_data_scenario3_stats_history.csv',
     ],
     'scenario4': [
-        'mono_analyze_only_upload_retrieve_questionnaire_response_cdr_data_scenario4_stats.csv'
-        'mono_analyze_upload_only_retrieve_questionnaire_response_cdr_data_scenario4_stats.csv',
-        'mono_analyze_upload_retrieve_questionnaire_response_cdr_data_scenario4_stats.csv',
+        'mono_analyze_only_upload_retrieve_questionnaire_response_cdr_data_scenario4_stats_history.csv'
+        'mono_analyze_upload_only_retrieve_questionnaire_response_cdr_data_scenario4_stats_history.csv',
+        'mono_analyze_upload_retrieve_questionnaire_response_cdr_data_scenario4_stats_history.csv',
     ],
     'scenario5': [
-        'mono_convert_only_upload_retrieve_location_data_scenario5_stats.csv',
-        'mono_convert_upload_only_retrieve_location_data_scenario5_stats.csv',
-        'mono_convert_upload_retrieve_location_data_scenario5_stats.csv',
+        'mono_convert_only_upload_retrieve_location_data_scenario5_stats_history.csv',
+        'mono_convert_upload_only_retrieve_location_data_scenario5_stats_history.csv',
+        'mono_convert_upload_retrieve_location_data_scenario5_stats_history.csv',
     ],
     'scenario6': [
-        'mono_convert_only_upload_retrieve_adverse_event_data_scenario6_stats.csv',
-        'mono_convert_upload_only_retrieve_adverse_event_data_scenario6_stats.csv',
-        'mono_convert_upload_retrieve_adverse_event_data_scenario6_stats.csv',
+        'mono_convert_only_upload_retrieve_adverse_event_data_scenario6_stats_history.csv',
+        'mono_convert_upload_only_retrieve_adverse_event_data_scenario6_stats_history.csv',
+        'mono_convert_upload_retrieve_adverse_event_data_scenario6_stats_history.csv',
     ],
 }
 
