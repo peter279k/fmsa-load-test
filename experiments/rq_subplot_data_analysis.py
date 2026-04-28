@@ -73,8 +73,8 @@ for scenario,csv_files in mono_csv_files.items():
                 length = max(len(mono_history['Timestamp']), len(micro_history['Timestamp']))
                 lengths = range(0, length)
 
-                failure_counts = list(mono_history[ylabel])
-                failure_counts.extend(list(micro_history[ylabel]))
+                failure_counts = list(mono_history[ylabel].tolist())
+                failure_counts.extend(list(micro_history[ylabel].tolist()))
 
                 failure_length = max(failure_counts)
 
