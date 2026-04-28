@@ -75,28 +75,24 @@ for scenario,csv_files in mono_csv_files.items():
 
     with plt.style.context(['science', 'ieee', 'no-latex']):
         fig, axs = plt.subplots(nrows=2, ncols=3)
+        ylabel = 'Total Failure Count'
+
+        length = min(len(mono_histories[0]['Timestamp']), len(micro_histories[0]['Timestamp']))
+        lengths = range(0, length)
 
         for index in range(0, 2):
-            if index == 0:
-                ylabel = 'Total Failure Count'
-            else:
-                ylabel = 'Total Average Response Time'
-
             for j in range(0, 3):
-                length = min(len(mono_histories[j]['Timestamp']), len(micro_histories[j]['Timestamp']))
-                lengths = range(0, length)
-
                 axs[index, j].xaxis.set_major_locator(MaxNLocator(integer=True))
                 axs[index, j].yaxis.set_major_locator(MaxNLocator(integer=True))
 
                 axs[index, j].plot(
                     lengths,
-                    mono_histories[0][ylabel][0:length],
+                    mono_histories[j][ylabel][0:length],
                     label='monolith', color='blue', ls='-', marker=''
                 )
                 axs[index, j].plot(
                     lengths,
-                    micro_histories[0][ylabel][0:length],
+                    micro_histories[j][ylabel][0:length],
                     label='microservice', color='orange', ls='-', marker=''
                 )
 
@@ -104,8 +100,6 @@ for scenario,csv_files in mono_csv_files.items():
 
                 axs[index, j].set_xlabel(xlabel, fontdict=fontdict)
                 axs[index, j].set_ylabel(ylabel, fontdict=fontdict)
-
-        plt.tight_layout()
 
         fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.svg', dpi=dpi)
         fig.savefig(f'{plot_dir}/fig_rq3_scenario{index+1}_result.png', dpi=dpi)
