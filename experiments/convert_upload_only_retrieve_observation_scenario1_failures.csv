@@ -1,0 +1,2 @@
+Method,Name,Error,Occurrences
+GET,GET /api/v1/retrieve/Observation?_id=ltc-observation-blood-pressure-example,CatchResponseError('Unexpected status code: 503'),484

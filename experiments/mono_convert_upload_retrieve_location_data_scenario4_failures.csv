@@ -1,0 +1,2 @@
+Method,Name,Error,Occurrences
+PUT,PUT /api/v1/update/Location,CatchResponseError('Unexpected status code: 504'),214

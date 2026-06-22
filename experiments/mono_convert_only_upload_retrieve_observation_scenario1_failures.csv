@@ -1,0 +1,2 @@
+Method,Name,Error,Occurrences
+POST,POST /api/v1/ltc_tw_2025_observation_blood_pressure,CatchResponseError('Unexpected status code: 502'),1

@@ -1,0 +1,3 @@
+Method,Name,Error,Occurrences
+PUT,PUT /api/v1/update/Procedure,CatchResponseError('Unexpected status code: 500'),4
+PUT,PUT /api/v1/update/Procedure,CatchResponseError('Unexpected status code: 504'),53

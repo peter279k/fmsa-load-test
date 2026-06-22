@@ -1,0 +1,3 @@
+Method,Name,Error,Occurrences
+POST,POST /api/v1/convert,CatchResponseError('Unexpected status code: 502'),1
+PUT,PUT /api/v1/update/Location,CatchResponseError('Unexpected status code: 502'),172
