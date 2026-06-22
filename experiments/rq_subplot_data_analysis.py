@@ -95,6 +95,8 @@ for scenario,csv_files in mono_csv_files.items():
                 axs[index, num].yaxis.set_major_locator(MaxNLocator(integer=True))
 
                 axs[index, num].set_xlim(0, 1200)
+                if int(failure_length) == 0:
+                    failure_length = 1
                 axs[index, num].set_ylim(0, failure_length)
 
                 axs[index, num].plot(
