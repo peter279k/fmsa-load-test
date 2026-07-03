@@ -50,12 +50,14 @@ mono_csv_files = {
 }
 
 micro_csv_files = {}
+real_mono_csv_files = {}
 titles = [['a', 'b', 'c'], ['d', 'e', 'f']]
 
 for scenario,csv_files in mono_csv_files.items():
     micro_csv_files[scenario] = []
     for csv_file in csv_files:
         micro_csv_files[scenario] += csv_file[5:],
+        real_mono_csv_files[scenario] += f'real_{csv_file}',
 
 
 xlabel = 'Timeline (s)'
@@ -68,6 +70,7 @@ for scenario,csv_files in mono_csv_files.items():
             for num in range(0, 3):
                 mono_history = pd.read_csv(csv_files[num])
                 micro_history = pd.read_csv(micro_csv_files[scenario][num])
+                real_mono_history = pd.read_csv(real_mono_csv_files[scenario][num])
 
                 ylabel = 'Total Failure Count'
                 y_label = 'Cumulative Failure Count'
@@ -83,11 +86,20 @@ for scenario,csv_files in mono_csv_files.items():
                 micro_history = micro_history.set_index('Timestamp')
                 micro_history = micro_history.resample('1s').mean(numeric_only=True).ffill()
 
-                length = min(len(mono_history[ylabel].to_list()), len(micro_history[ylabel].to_list()))
+                real_mono_history['Timestamp'] = pd.to_datetime(real_mono_history['Timestamp'], unit='s')
+                real_mono_history = real_mono_history.set_index('Timestamp')
+                real_mono_history = real_mono_history.resample('1s').mean(numeric_only=True).ffill()
+
+                length = min(
+                    len(mono_history[ylabel].to_list()),
+                    len(micro_history[ylabel].to_list()),
+                    len(real_mono_history[ylabel].to_list()),
+                )
                 lengths = range(length)
 
                 failure_counts = list(mono_history[ylabel].tolist())
                 failure_counts.extend(list(micro_history[ylabel].tolist()))
+                failure_counts.extend(list(real_mono_history[ylabel].tolist()))
 
                 failure_length = max(failure_counts)
 
@@ -102,12 +114,17 @@ for scenario,csv_files in mono_csv_files.items():
                 axs[index, num].plot(
                     lengths,
                     mono_history[ylabel][0:length],
-                    label='monolith', color='blue', ls='-', marker=''
+                    label='ver-microservice', color='blue', ls='-', marker=''
                 )
                 axs[index, num].plot(
                     lengths,
                     micro_history[ylabel][0:length],
-                    label='microservice', color='orange', ls='-', marker=''
+                    label='ho-microservice', color='orange', ls='-', marker=''
+                )
+                axs[index, num].plot(
+                    lengths,
+                    real_mono_history[ylabel][0:length],
+                    label='monolith', color='red', ls='-', marker=''
                 )
 
                 if index == 0 and num == 0:
