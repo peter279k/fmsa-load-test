@@ -6,8 +6,16 @@ host=$1
 export SSHPASS=$2
 host_name=$3
 
-sshpass -e ssh -o StrictHostKeyChecking=no "$USER@$host_name" \
-    'cd ~/fmsa if [[ ! -d ./fmsa-venv ]]; then python3 -m venv fmsa-venv fi; ./fmsa-venv/bin/pip install -r api_gateway/requirements.txt && ./fmsa-venv/bin/pip install -r api_gateway/requirements-dev.txt'
+# Prerequisite
+# ssh "$USER@$host_name"
+# Run: cd ~/fmsa
+
+#if [[ ! -d ./fmsa-venv ]]; then
+#    python3 -m venv fmsa-venv
+#fi;
+
+#./fmsa-venv/bin/pip install -r api_gateway/requirements.txt
+#./fmsa-venv/bin/pip install -r api_gateway/requirements-dev.txt
 
 cd ~/fmsa-load-test/experiments
 
