@@ -35,8 +35,14 @@ fi;
 
 for file_name in $(cat $path)
 do
-    sshpass -e ssh -o StrictHostKeyChecking=no "$USER@$host_name" \
-        'cd fmsa && docker compose down && sleep 300 && docker volume rm $(docker volume ls | grep fmsa | awk "{print $2}") && docker compose up -d && sleep 600'
+    sshpass -e ssh -o StrictHostKeyChecking=no "$USER@$host_name" 'cd fmsa && docker compose down'
+    sleep 300
+
+    sshpass -e ssh -o StrictHostKeyChecking=no "$USER@$host_name" 'cd fmsa && docker volume rm $(docker volume ls | grep fmsa | awk "{print $2}")'
+    sshpass -e ssh -o StrictHostKeyChecking=no "$USER@$host_name" 'cd fmsa && docker compose up -d'
+
+    sleep 600
+
     cd ~/fmsa-load-test/experiments
     for _ in $(1 5)
     do
