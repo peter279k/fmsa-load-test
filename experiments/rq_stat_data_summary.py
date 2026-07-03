@@ -36,11 +36,13 @@ mono_csv_files = {
 }
 
 micro_csv_files = {}
+real_mono_csv_files = {}
 
 for scenario,csv_files in mono_csv_files.items():
     micro_csv_files[scenario] = []
     for index,csv_file in enumerate(csv_files):
         micro_csv_files[scenario] += csv_file.replace('_history', '')[5:],
+        real_mono_csv_files[scenario] += 'real_' + csv_file.replace('_history', ''),
         mono_csv_files[scenario][index] = csv_file.replace('_history', '')
 
 for scenario, csv_files in mono_csv_files.items():
@@ -56,5 +58,12 @@ for scenario, csv_files in mono_csv_files.items():
         total = stats[stats['Name'] == 'Aggregated'].iloc[0]
 
         print(f'\n### Overall {micro_csv_files[scenario][index]} Summary ###')
+        print(f"Failure Rate: {total['Failure Count']/total['Request Count']*100:.2f}%")
+        print(f"Average Response Time: {total['Average Response Time']:.0f}ms")
+
+        stats = pd.read_csv(real_mono_csv_files[scenario][index])
+        total = stats[stats['Name'] == 'Aggregated'].iloc[0]
+
+        print(f'\n### Overall {real_mono_csv_files[scenario][index]} Summary ###')
         print(f"Failure Rate: {total['Failure Count']/total['Request Count']*100:.2f}%")
         print(f"Average Response Time: {total['Average Response Time']:.0f}ms")
