@@ -44,7 +44,7 @@ do
     sleep 600
 
     cd ~/fmsa-load-test/experiments
-    for _ in $(1 5)
+    for _ in $(seq 1 5)
     do
         host_name=$host ./fmsa-load-test-experiments/bin/python pre_upload_required_references.py
         host_name=$3
