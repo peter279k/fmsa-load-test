@@ -2,13 +2,12 @@
 
 echo "Executing Load Test is started!"
 
-cd ~/fmsa
-if [[ ! -d ./fmsa-venv ]]; then
-    python3 -m venv fmsa-venv
-fi;
+host=$1
+SSHPASS=$2
+host_name=$3
 
-./fmsa-venv/bin/pip install -r api_gateway/requirements.txt
-./fmsa-venv/bin/pip install -r api_gateway/requirements-dev.txt
+sshpass -e ssh -o StrictHostKeyChecking=no "user_name@$host_name" \
+    'cd ~/fmsa if [[ ! -d ./fmsa-venv ]]; then python3 -m venv fmsa-venv fi; ./fmsa-venv/bin/pip install -r api_gateway/requirements.txt && ./fmsa-venv/bin/pip install -r api_gateway/requirements-dev.txt'
 
 cd ~/fmsa-load-test/experiments
 
@@ -19,9 +18,7 @@ fi;
 ./fmsa-load-test-experiments/bin/pip install -r ../requirements.txt
 
 
-host=$1
 path="scenarios.txt"
-SSHPASS=$2
 
 if [[ ! -f "$path" ]]; then
     echo "$path file is not found."
