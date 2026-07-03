@@ -40,7 +40,7 @@ do
     cd ~/fmsa-load-test/experiments
     for _ in $(1 5)
     do
-        ./fmsa-load-test-experiments/bin/python pre_upload_required_references.py
+        host_name=$host ./fmsa-load-test-experiments/bin/python pre_upload_required_references.py
     done;
 
     csv_result=$(echo $file_name | awk '{split($1,a,"."); print a[1]}')
