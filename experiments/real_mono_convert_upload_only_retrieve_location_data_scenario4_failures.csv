@@ -1,0 +1,3 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+PUT,PUT /api/v1/update/Location,CatchResponseError('Unexpected status code: 504'),472,2026-07-03T14:40:50Z,2026-07-03T14:42:11Z
+PUT,PUT /api/v1/update/Location,CatchResponseError('Unexpected status code: 503'),4915,2026-07-03T14:31:43Z,2026-07-03T14:43:48Z

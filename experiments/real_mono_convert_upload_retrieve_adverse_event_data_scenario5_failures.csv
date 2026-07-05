@@ -1,0 +1,4 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+POST,POST /api/v1/convert,CatchResponseError('Unexpected status code: 503'),7688,2026-07-03T13:19:51Z,2026-07-03T13:31:53Z
+PUT,PUT /api/v1/update/AdverseEvent,CatchResponseError('Unexpected status code: 503'),1870,2026-07-03T13:19:51Z,2026-07-03T13:31:52Z
+PUT,PUT /api/v1/update/AdverseEvent,CatchResponseError('Unexpected status code: 504'),5671,2026-07-03T13:17:11Z,2026-07-03T13:31:46Z
