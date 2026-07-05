@@ -3,7 +3,7 @@ import glob
 import pandas as pd
 import scienceplots
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
+from matplotlib.ticker import MaxNLocator, PercentFormatter
 
 
 print('RQ3 experimental data analysis is started (subplots).')
@@ -33,19 +33,14 @@ mono_csv_files = {
         'mono_convert_upload_retrieve_medication_administration_data_scenario3_stats_history.csv',
     ],
     'scenario4': [
-        'mono_analyze_only_upload_retrieve_questionnaire_response_cdr_data_scenario4_stats_history.csv',
-        'mono_analyze_upload_only_retrieve_questionnaire_response_cdr_data_scenario4_stats_history.csv',
-        'mono_analyze_upload_retrieve_questionnaire_response_cdr_data_scenario4_stats_history.csv',
+        'mono_convert_only_upload_retrieve_location_data_scenario4_stats_history.csv',
+        'mono_convert_upload_only_retrieve_location_data_scenario4_stats_history.csv',
+        'mono_convert_upload_retrieve_location_data_scenario4_stats_history.csv',
     ],
     'scenario5': [
-        'mono_convert_only_upload_retrieve_location_data_scenario5_stats_history.csv',
-        'mono_convert_upload_only_retrieve_location_data_scenario5_stats_history.csv',
-        'mono_convert_upload_retrieve_location_data_scenario5_stats_history.csv',
-    ],
-    'scenario6': [
-        'mono_convert_only_upload_retrieve_adverse_event_data_scenario6_stats_history.csv',
-        'mono_convert_upload_only_retrieve_adverse_event_data_scenario6_stats_history.csv',
-        'mono_convert_upload_retrieve_adverse_event_data_scenario6_stats_history.csv',
+        'mono_convert_only_upload_retrieve_adverse_event_data_scenario5_stats_history.csv',
+        'mono_convert_upload_only_retrieve_adverse_event_data_scenario5_stats_history.csv',
+        'mono_convert_upload_retrieve_adverse_event_data_scenario5_stats_history.csv',
     ],
 }
 
@@ -55,6 +50,7 @@ titles = [['a', 'b', 'c'], ['d', 'e', 'f']]
 
 for scenario,csv_files in mono_csv_files.items():
     micro_csv_files[scenario] = []
+    real_mono_csv_files[scenario] = []
     for csv_file in csv_files:
         micro_csv_files[scenario] += csv_file[5:],
         real_mono_csv_files[scenario] += f'real_{csv_file}',
@@ -72,23 +68,33 @@ for scenario,csv_files in mono_csv_files.items():
                 micro_history = pd.read_csv(micro_csv_files[scenario][num])
                 real_mono_history = pd.read_csv(real_mono_csv_files[scenario][num])
 
-                ylabel = 'Total Failure Count'
-                y_label = 'Cumulative Failure Count'
-                if index == 1:
+                if index == 0:
+                    ylabel = 'Cumulative Failure Rate'
+                    y_label = 'Cumulative Failure Rate'
+                else:
                     ylabel = 'Total Average Response Time'
                     y_label = 'Average Response Time (ms)'
 
                 mono_history['Timestamp'] = pd.to_datetime(mono_history['Timestamp'], unit='s')
                 mono_history = mono_history.set_index('Timestamp')
                 mono_history = mono_history.resample('1s').mean(numeric_only=True).ffill()
+                mono_history['Cumulative Failure Rate'] = (
+                    mono_history['Total Failure Count'] / mono_history['Total Request Count']
+                ).fillna(0)
 
                 micro_history['Timestamp'] = pd.to_datetime(micro_history['Timestamp'], unit='s')
                 micro_history = micro_history.set_index('Timestamp')
                 micro_history = micro_history.resample('1s').mean(numeric_only=True).ffill()
+                micro_history['Cumulative Failure Rate'] = (
+                    micro_history['Total Failure Count'] / micro_history['Total Request Count']
+                ).fillna(0)
 
                 real_mono_history['Timestamp'] = pd.to_datetime(real_mono_history['Timestamp'], unit='s')
                 real_mono_history = real_mono_history.set_index('Timestamp')
                 real_mono_history = real_mono_history.resample('1s').mean(numeric_only=True).ffill()
+                real_mono_history['Cumulative Failure Rate'] = (
+                    real_mono_history['Total Failure Count'] / real_mono_history['Total Request Count']
+                ).fillna(0)
 
                 length = min(
                     len(mono_history[ylabel].to_list()),
@@ -97,34 +103,58 @@ for scenario,csv_files in mono_csv_files.items():
                 )
                 lengths = range(length)
 
-                failure_counts = list(mono_history[ylabel].tolist())
-                failure_counts.extend(list(micro_history[ylabel].tolist()))
-                failure_counts.extend(list(real_mono_history[ylabel].tolist()))
-
-                failure_length = max(failure_counts)
-
                 axs[index, num].xaxis.set_major_locator(MaxNLocator(integer=True))
-                axs[index, num].yaxis.set_major_locator(MaxNLocator(integer=True))
 
                 axs[index, num].set_xlim(0, 1200)
-                if int(failure_length) == 0:
-                    failure_length = 1
-                axs[index, num].set_ylim(0, failure_length)
 
-                axs[index, num].plot(
+                if index == 0:
+                    # Scale the axis to the maximum failure rate observed,
+                    # leaving some headroom so the line does not touch the top.
+                    failure_rates = list(mono_history[ylabel].tolist())
+                    failure_rates.extend(list(micro_history[ylabel].tolist()))
+                    failure_rates.extend(list(real_mono_history[ylabel].tolist()))
+
+                    max_failure_rate = max(failure_rates)
+
+                    top = max_failure_rate * 1.1
+                    if top <= 0:
+                        # No failures at all: use a small span so the flat
+                        # line at 0% is drawn against a readable axis.
+                        top = 0.01
+                    # Small margin below 0 so a line sitting at 0% stays
+                    # visible instead of hiding on the bottom axis.
+                    bottom = -top * 0.05
+                    axs[index, num].set_ylim(bottom, top)
+                    axs[index, num].yaxis.set_major_formatter(PercentFormatter(xmax=1))
+                else:
+                    axs[index, num].yaxis.set_major_locator(MaxNLocator(integer=True))
+
+                    failure_counts = list(mono_history[ylabel].tolist())
+                    failure_counts.extend(list(micro_history[ylabel].tolist()))
+                    failure_counts.extend(list(real_mono_history[ylabel].tolist()))
+
+                    failure_length = max(failure_counts)
+                    if int(failure_length) == 0:
+                        failure_length = 1
+                    axs[index, num].set_ylim(0, failure_length)
+
+                line_vmsa, = axs[index, num].plot(
                     lengths,
                     mono_history[ylabel][0:length],
-                    label='ver-microservice', color='blue', ls='-', marker=''
+                    label='V-MSA', color='blue', ls='-',
+                    marker='o', markevery=(0, 150), markersize=3.5
                 )
-                axs[index, num].plot(
+                line_hmsa, = axs[index, num].plot(
                     lengths,
                     micro_history[ylabel][0:length],
-                    label='ho-microservice', color='orange', ls='-', marker=''
+                    label='H-MSA', color='orange', ls='--',
+                    marker='s', markevery=(50, 150), markersize=3.5
                 )
-                axs[index, num].plot(
+                line_mono, = axs[index, num].plot(
                     lengths,
                     real_mono_history[ylabel][0:length],
-                    label='monolith', color='red', ls='-', marker=''
+                    label='MONO', color='red', ls=':',
+                    marker='^', markevery=(100, 150), markersize=3.5
                 )
 
                 if index == 0 and num == 0:
@@ -134,7 +164,12 @@ for scenario,csv_files in mono_csv_files.items():
 
                 axs[index, num].set_title(f'({titles[index][num]})', y=-0.4)
 
-                axs[index, num].legend()
+        # One shared legend outside the six subplots, placed at the top-left
+        # so it does not overlap the centered S{n} title.
+        fig.legend(
+            handles=[line_mono, line_hmsa, line_vmsa],
+            loc='outside upper left', ncol=3
+        )
 
         fig.supxlabel(xlabel, fontsize=11)
         fig.suptitle(f'S{scenario[1:]}', fontsize=15)
