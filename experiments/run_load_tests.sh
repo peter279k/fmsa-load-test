@@ -21,6 +21,7 @@ fi;
 
 host=$1
 index=$2
+counts=$3
 path="scenarios.txt"
 
 if [[ ! -f "$path" ]]; then
@@ -28,34 +29,37 @@ if [[ ! -f "$path" ]]; then
     exit 1;
 fi;
 
-for file_name in $(cat $path)
+for count in $(seq $counts)
 do
-    docker stack rm fmsa
-    sleep 300
-    docker volume rm $(docker volume ls | grep fmsa | awk '{print $2}')
-
-    cd ~/fmsa
-
-    set -a && source .env && set +a && docker stack deploy --compose-file docker-compose.yml fmsa
-
-    cd ~/swarm-auto-scaler/scaler
-    ./deploy.sh
-
-    sleep 600
-
-    cd ~/fmsa-load-test/experiments
-    for _ in $(seq 1 5)
+    for file_name in $(cat $path)
     do
-        ./fmsa-load-test-experiments/bin/python pre_upload_required_references.py
+        docker stack rm fmsa
+        sleep 300
+        docker volume rm $(docker volume ls | grep fmsa | awk '{print $2}')
+
+        cd ~/fmsa
+
+        set -a && source .env && set +a && docker stack deploy --compose-file docker-compose.yml fmsa
+
+        cd ~/swarm-auto-scaler/scaler
+        ./deploy.sh
+
+        sleep 600
+
+        cd ~/fmsa-load-test/experiments
+        for _ in $(seq 1 5)
+        do
+            ./fmsa-load-test-experiments/bin/python pre_upload_required_references.py
+        done;
+
+        csv_result=$(echo $file_name | awk '{split($1,a,"."); print a[1]}')
+        ./fmsa-load-test-experiments/bin/locust -f $file_name --headless \
+            --host "http://$host" \
+            --users 1000 \
+            --spawn-rate 1.11 \
+            --run-time 20m \
+            --csv="${csv_result}_${count}"
     done;
 
-    csv_result=$(echo $file_name | awk '{split($1,a,"."); print a[1]}')
-    ./fmsa-load-test-experiments/bin/locust -f $file_name --headless \
-        --host "http://$host" \
-        --users 1000 \
-        --spawn-rate 1.11 \
-        --run-time 20m \
-        --csv="$csv_result"
+    echo "Executing Load Test is done! count: $count"
 done;
-
-echo "Executing Load Test is done!"
