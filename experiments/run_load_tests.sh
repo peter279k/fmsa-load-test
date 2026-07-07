@@ -20,8 +20,7 @@ fi;
 
 
 host=$1
-index=$2
-counts=$3
+counts=$2
 path="scenarios.txt"
 
 if [[ ! -f "$path" ]]; then
